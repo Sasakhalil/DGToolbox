@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Free 3D Aim Trainer | Gridshot & Tracking | DGToolbox</title>
+    <meta name="description" content="Improve your FPS aim (Valorant, CS2, Overwatch) with our 100% free, offline, zero-latency 3D Aim Trainer. No download required.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Free 3D Aim Trainer | Gridshot & Tracking | DGToolbox">
+    <meta property="og:description" content="Improve your FPS aim (Valorant, CS2, Overwatch) with our 100% free, offline, zero-latency 3D Aim Trainer. No download required.">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/aim-trainer-preview.png">
+    <meta property="og:url" content="https://dgtoolbox.com/aim-trainer.html">
+    <link rel="canonical" href="https://dgtoolbox.com/aim-trainer.html">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cyber.Aim - Browser FPS Trainer">
+    <meta name="twitter:description"
+        content="Train your aim without downloads. Gridshot, Spidershot, and Tracking modes available now.">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;800&family=Rajdhani:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Cyber.Aim Trainer",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "Any",
+      "genre": "Action",
+      "description": "A high-performance 3D aim trainer that runs in your browser. Features multiple training modes to improve FPS skills.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "320"
+      }
+    }
+    </script>
+
+    <link rel="stylesheet" href="css/aim-trainer-specific.css">
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;" title="Exit to Main Menu">
+            CYBER.AIM</div>
+        <div style="flex:1"></div>
+        <button class="nav-btn active" onclick="app.nav('hub')" id="n-hub"><i class="fas fa-th-large"></i></button>
+        <button class="nav-btn" onclick="app.nav('config')" id="n-config"><i class="fas fa-cog"></i></button>
+        <button class="nav-btn" onclick="app.nav('stats')" id="n-stats"><i class="fas fa-dna"></i></button>
+        <div style="height:50px"></div>
+        <button class="nav-btn" onclick="window.location.href='index.html'" style="border-color:#555; color:#555;"><i
+                class="fas fa-sign-out-alt"></i></button>
+    </aside>
+
+    <div class="stage">
+
+        <!-- HUB -->
+        <div id="p-hub" class="panel active">
+            <div class="cyber-header">TRAINING__PROTOCOLS</div>
+
+            <div class="mode-grid">
+                <!-- Gridshot -->
+                <div class="cyber-card" onclick="game.init('grid')">
+                    <div class="cc-tag">PRECISION</div>
+                    <div class="cc-icon"><i class="fas fa-crosshairs"></i></div>
+                    <div class="cc-title">GRID.LOCK</div>
+                    <div class="cc-desc">Three targets. Instant refresh. Maximize DPS. The standard benchmark.</div>
+                </div>
+
+                <!-- Spider -->
+                <div class="cyber-card" onclick="game.init('spider')">
+                    <div class="cc-tag">FLICKING</div>
+                    <div class="cc-icon"><i class="fas fa-spider"></i></div>
+                    <div class="cc-title">WIDOW_MAKER</div>
+                    <div class="cc-desc">Extreme flicking. Center to outer edges. Reset after every shot.</div>
+                </div>
+
+                <!-- Track -->
+                <div class="cyber-card" onclick="game.init('track')">
+                    <div class="cc-tag">TRACKING</div>
+                    <div class="cc-icon"><i class="fas fa-eye"></i></div>
+                    <div class="cc-title">ORBITAL_TRACK</div>
+                    <div class="cc-desc">Keep lock on moving entities. Unpredictable movement patterns.</div>
+                </div>
+            </div>
+            <!-- SEO CONTENT (Moved inside Hub) -->
+            <article
+                style="max-width: 100%; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: #888; font-family: var(--font-body); line-height: 1.6;">
+                <h1 style="font-family: var(--font-head); color: #fff; font-size: 2.2rem; text-transform: uppercase;">
+                    Browser-Based 3D Aim Trainer (No Download)</h1>
+                <p style="margin-bottom: 2rem; font-size: 1.1rem; max-width: 800px;">
+                    <strong>Cyber.Aim</strong> is the ultimate <strong style="color:var(--neon-blue)">online aim
+                        trainer</strong> designed for competitive players of Valorant, CS2, Overwatch 2, and Apex
+                    Legends.
+                    Unlike aimlabs or kovaaks, this runs directly in your browser with <strong>zero latency</strong> and
+                    100% offline capability.
+                </p>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+                    <div>
+                        <h2 style="font-family: var(--font-head); color: #fff; font-size: 1.5rem; margin-bottom: 1rem;">
+                            <i class="fas fa-microchip" style="color:var(--neon-yellow)"></i> Technical Superiority
+                        </h2>
+                        <ul style="list-style: none; padding: 0;">
+                            <li
+                                style="margin-bottom: 10px; border-left: 2px solid var(--neon-yellow); padding-left: 10px;">
+                                <strong>High Refresh Rate:</strong> Uncapped FPS support (144Hz, 240Hz, 360Hz).
+                            </li>
+                            <li
+                                style="margin-bottom: 10px; border-left: 2px solid var(--neon-yellow); padding-left: 10px;">
+                                <strong>Input Latency:</strong> Raw mouse input for 1:1 feel with your game.
+                            </li>
+                            <li
+                                style="margin-bottom: 10px; border-left: 2px solid var(--neon-yellow); padding-left: 10px;">
+                                <strong>Customizability:</strong> Adjust FOV, Sensitivity, and Crosshair to match your
+                                main game.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h2 style="font-family: var(--font-head); color: #fff; font-size: 1.5rem; margin-bottom: 1rem;">
+                            <i class="fas fa-dumbbell" style="color:var(--neon-pink)"></i> Pro Training Routines
+                        </h2>
+                        <ul style="list-style: none; padding: 0;">
+                            <li
+                                style="margin-bottom: 10px; border-left: 2px solid var(--neon-pink); padding-left: 10px;">
+                                <strong style="color:var(--neon-pink)">Warmup:</strong> 5 mins of Gridshot (GRID.LOCK)
+                                to get blood flowing.
+                            </li>
+                            <li
+                                style="margin-bottom: 10px; border-left: 2px solid var(--neon-pink); padding-left: 10px;">
+                                <strong style="color:var(--neon-pink)">Precision:</strong> 10 mins of Spidershot
+                                (WIDOW_MAKER) focusing on under-flicking.
+                            </li>
+                            <li
+                                style="margin-bottom: 10px; border-left: 2px solid var(--neon-pink); padding-left: 10px;">
+                                <strong style="color:var(--neon-pink)">Smoothness:</strong> 5 mins of Tracking
+                                (ORBITAL_TRACK) to improve micro-adjustments.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="font-family: var(--font-head); color: #fff; font-size: 1.5rem;">How to Convert Valorant
+                    Sensitivity to Cyber.Aim?</h3>
+                <p style="margin-bottom: 1.5rem;">
+                    Cyber.Aim uses a standardized multiplier. To get your perfect sensitivity, use our <a
+                        href="sensitivity-converter.html"
+                        style="color:var(--neon-yellow); text-decoration: underline;">Sensitivity Converter Tool</a> to
+                    convert from Valorant, CS:GO, or Fortnite directly to our engine.
+                </p>
+
+                <h3 style="font-family: var(--font-head); color: #fff; font-size: 1.5rem;">Why Practice Aim Online?</h3>
+                <p>
+                    Downloading heavy software just to warm up is obsolete. With WebGL 2.0 technology, Cyber.Aim
+                    delivers native performance without the bloat.
+                    Perfect for playing on school computers, library PCs, or just getting a quick warmup before a ranked
+                    match.
+                </p>
+            </article>
+        </div>
+
+        <!-- CONFIG -->
+        <div id="p-config" class="panel">
+            <div class="cyber-header">SYS.CONFIG</div>
+
+            <div class="settings-grid">
+                <div>
+                    <div class="setting-box">
+                        <span class="lbl"><i class="fas fa-clock"></i> SESSION DURATION</span>
+                        <select id="cfg-dur">
+                            <option value="30">30 Seconds</option>
+                            <option value="60" selected>60 Seconds</option>
+                            <option value="120">2 Minutes</option>
+                            <option value="999">Endless</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-box">
+                        <span class="lbl"><i class="fas fa-drafting-compass"></i> SENSITIVITY MULTIPLIER</span>
+                        <input type="range" min="0.5" max="2.0" step="0.1" value="1.0"
+                            oninput="this.nextElementSibling.innerText = this.value">
+                        <span style="float:right; color:var(--neon-yellow); font-family:var(--font-head);">1.0</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="setting-box">
+                        <span class="lbl"><i class="fas fa-bullseye"></i> TARGET SIZE</span>
+                        <input type="range" id="cfg-size" min="0.5" max="2.0" step="0.1" value="1.0"
+                            oninput="this.nextElementSibling.innerText = this.value + 'x'">
+                        <span style="float:right; color:var(--neon-yellow); font-family:var(--font-head);">1.0x</span>
+                    </div>
+
+                    <div class="setting-box">
+                        <span class="lbl"><i class="fas fa-palette"></i> TARGET COLOR</span>
+                        <div style="display:flex; gap:10px;">
+                            <div style="width:30px; height:30px; background:#00f0ff; cursor:pointer; border:1px solid #fff;"
+                                onclick="game.cfg.color='#00f0ff'"></div>
+                            <div style="width:30px; height:30px; background:#fcee0a; cursor:pointer; border:1px solid #fff;"
+                                onclick="game.cfg.color='#fcee0a'"></div>
+                            <div style="width:30px; height:30px; background:#ff003c; cursor:pointer; border:1px solid #fff;"
+                                onclick="game.cfg.color='#ff003c'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div id="p-stats" class="panel">
+            <div class="cyber-header">DATA_LOGS</div>
+            <button class="btn-cyber" style="font-size:1rem; padding:10px;"
+                onclick="localStorage.removeItem('cyber_aim_logs'); app.loadStats();">PURGE DATA</button>
+            <div id="log-feed" style="margin-top:20px; overflow-y:auto; height:400px; padding-right:10px;">
+                <!-- JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- GAME LAYER --> <!-- GAME LAYER -->
+    <div id="game-layer">
+        <canvas id="canvas"></canvas>
+
+        <div class="hud-ui">
+            <div class="hud-corner top-left">
+                <div class="sub-val">SCORE</div>
+                <div class="big-val" id="h-score">0</div>
+            </div>
+
+            <div class="hud-corner top-right">
+                <div class="sub-val">REMAINING</div>
+                <div class="big-val" id="h-time">60</div>
+            </div>
+
+            <div class="hud-corner" style="bottom:40px; left:40px;">
+                <div class="sub-val">ACCURACY</div>
+                <div style="font-size:2rem; color:#fff;" id="h-acc">100%</div>
+            </div>
+
+            <button onclick="game.stop()"
+                style="position:absolute; bottom:40px; right:40px; pointer-events:auto; background:transparent; border:1px solid #555; color:#888; padding:10px 20px; cursor:pointer; font-family:var(--font-head);">
+                ABORT MISSION
+            </button>
+        </div>
+
+        <!-- Hardware Crosshair -->
+        <div id="hw-crosshair"
+            style="position:absolute; top:50%; left:50%; width:4px; height:4px; background:#0f0; box-shadow:0 0 5px #0f0; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; z-index:510;">
+        </div>
+
+        <!-- CENTER HUD PANEL -->
+        <div id="hud-controls"
+            style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; z-index:1000; display:flex; flex-direction:column; gap:20px;">
+            <div
+                style="font-family:var(--font-head); font-size:3rem; color:#fff; text-shadow:0 0 20px var(--neon-blue);">
+                SYSTEM ONLINE</div>
+
+            <button id="btn-start" onclick="game.beginSequence()" style="
+                background: var(--neon-yellow); 
+                color: #000; 
+                border: none; 
+                padding: 15px 40px; 
+                font-family: var(--font-head); 
+                font-size: 1.5rem; 
+                cursor: pointer; 
+                clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+                transition: transform 0.2s, box-shadow 0.2s;
+            ">INITIATE SEQUENCE</button>
+
+            <!-- CANCEL BUTTON -->
+            <button onclick="game.stop()" style="
+                background: transparent;
+                color: #888;
+                border: 1px solid #555;
+                padding: 10px 30px;
+                font-family: var(--font-head);
+                font-size: 1rem;
+                cursor: pointer;
+                clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            ">RETURN TO BASE</button>
+
+            <div style="color:rgba(255,255,255,0.5); font-size:0.9rem;">ENSURE AUDIO IS ENABLED</div>
+        </div>
+
+        <!-- COUNTDOWN OVERLAY -->
+        <div id="countdown"
+            style="position:absolute; inset:0; display:none; justify-content:center; align-items:center; font-family:var(--font-head); font-size:10rem; color:#fff; pointer-events:none; z-index:1001; text-shadow:0 0 30px var(--neon-pink);">
+            3
+        </div>
+
+    </div>
+
+    <!-- STYLES FOR ANIMATION -->
+    <style>
+        @keyframes blink {
+            50% {
+                opacity: 0.3;
+            }
+        }
+    </style>
+
+    <!-- RESULT MODAL -->
+    <div id="modal-end" class="cyber-modal">
+        <div class="modal-box">
+            <div style="font-family:var(--font-head); font-size:4rem; color:#fff; text-shadow:0 0 20px var(--neon-pink);"
+                id="r-rank">S</div>
+            <div style="color:#888; font-size:1.2rem; margin-bottom:30px;">PERFORMANCE RATING</div>
+
+            <div style="display:flex; justify-content:space-around; gap:40px; margin-bottom:40px;">
+                <div>
+                    <div style="color:var(--neon-blue); font-size:0.9rem;">SCORE</div>
+                    <div style="font-size:2rem; font-weight:700;" id="r-score">0</div>
+                </div>
+                <div>
+                    <div style="color:var(--neon-blue); font-size:0.9rem;">ACCURACY</div>
+                    <div style="font-size:2rem; font-weight:700;" id="r-acc">0%</div>
+                </div>
+            </div>
+
+            <button class="btn-cyber" onclick="game.restart()">RE-ENGAGE</button>
+            <button class="btn-cyber" style="border-color:#555; color:#888;" onclick="game.stop()">DISMISS</button>
+        </div>
+    </div>
+
+    <script src="js/aim-trainer.js"></script>
+</body>
+
+</html>

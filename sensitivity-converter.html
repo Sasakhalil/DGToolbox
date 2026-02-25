@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mouse Sensitivity Converter (Valorant, CS2, OW2) | DGToolbox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert your mouse sensitivity perfectly between Valorant, CS2, Overwatch 2, Apex Legends, and more. Calculate EDPI instantly.">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Chakra+Petch:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="canonical" href="https://dgtoolbox.com/sensitivity-converter.html">
+
+    
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mouse Sensitivity Converter (Valorant, CS2, OW2) | DGToolbox">
+    <meta property="og:description" content="Convert your mouse sensitivity perfectly between Valorant, CS2, Overwatch 2, Apex Legends, and more. Calculate EDPI instantly.">
+    <meta property="og:url" content="https://dgtoolbox.com/sensitivity-converter.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/sens-converter-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FPS Mouse Sensitivity Converter">
+    <meta name="twitter:description"
+        content="Don't ruin your muscle memory. Convert sensitivity between games instantly.">
+
+    <!-- Schema.org for Tool -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "DGToolbox Sensitivity Converter",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Web",
+      "description": "Accurate mouse sensitivity converter for FPS games including Valorant, CS2, and Fortnite.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <link rel="stylesheet" href="css/sensitivity-converter-specific.css">
+</head>
+
+<body>
+
+    <div class="bg-deco"></div>
+
+    <div class="tactical-frame">
+        <div class="inner-content">
+
+            <header class="hud-header">
+                <div class="title-block">
+                    <span>Tactical Converter</span>
+                    <div class="ui-title">SENSITIVITY // OPS</div>
+                </div>
+
+                <div class="header-right">
+                    <a href="index.html" class="back-nav">
+                        <i class="fas fa-chevron-left"></i> BACK
+                    </a>
+                    <div class="status-block">
+                        SYSTEM READY<br>
+                        <span style="font-size:0.8rem; color:#555;">V 4.1.0</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="ops-grid">
+                <!-- SOURCE -->
+                <div class="panel">
+                    <div class="panel-label">INPUT STREAM</div>
+                    <div class="control-group">
+                        <span class="lbl">Game Engine</span>
+                        <select id="gameA" style="display:none;"></select>
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select" id="c-gameA">
+                                <div class="custom-select-trigger"><span class="selection-text">Select Game</span>
+                                    <div class="arrow"></div>
+                                </div>
+                                <div class="custom-options"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group"><span class="lbl">Sensitivity</span><input type="number" id="sensA"
+                            value="1.0" step="0.001"></div>
+                    <div class="control-group"><span class="lbl">DPI</span><input type="number" id="dpiA" value="800"
+                            step="50"></div>
+                </div>
+
+                <!-- CONTROLS -->
+                <div class="action-col">
+                    <button class="tac-btn" onclick="app.swap()" title="SWAP"><i class="fas fa-random"></i></button>
+                    <button class="tac-btn" id="btn-lock" onclick="app.toggleLock()" title="LINK DPI"><i
+                            class="fas fa-link"></i></button>
+                </div>
+
+                <!-- TARGET -->
+                <div class="panel">
+                    <div class="panel-label">TARGET STREAM</div>
+                    <div class="control-group">
+                        <span class="lbl">Game Engine</span>
+                        <select id="gameB" style="display:none;"></select>
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select" id="c-gameB">
+                                <div class="custom-select-trigger"><span class="selection-text">Select Game</span>
+                                    <div class="arrow"></div>
+                                </div>
+                                <div class="custom-options"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group"><span class="lbl">DPI</span><input type="number" id="dpiB" value="800"
+                            step="50"></div>
+                    <div class="control-group" style="opacity: 0.5;"><span class="lbl">// AUTO-CALCULATED</span>
+                        <div
+                            style="height: 45px; background: repeating-linear-gradient(45deg, #222, #222 10px, #111 10px, #111 20px); border: 1px solid #333;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESULT -->
+            <div class="result-sector">
+                <div class="copy-overlay" id="overlay">COPIED</div>
+                <div>
+                    <div style="font-size: 0.8rem; color: #555; margin-bottom:5px;">CONVERTED VALUE</div>
+                    <div class="res-display" onclick="app.copy()" style="cursor: pointer;" title="CLICK COPY">0.000
+                    </div>
+                </div>
+                <div class="meta-stats">
+                    <div class="stat-row">EFFECTIVE DPI <span class="stat-val" id="val-edpi">0</span></div>
+                    <div class="stat-row">360° DISTANCE <span class="stat-val" id="val-cm">0 CM</span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SEO CONTENT SECTION (Crucial for Ranking) -->
+    <article class="seo-content">
+        <h1>Mouse Sensitivity Converter for FPS Games</h1>
+        <p>
+            Struggling to maintain your aim when switching between <strong>Valorant</strong>, <strong>CS2</strong>,
+            <strong>Apex Legends</strong>, or <strong>Fortnite</strong>?
+            Different game engines handle mouse input differently, meaning "Sensitivity 1.0" in one game feels
+            completely different in another.
+        </p>
+        <p>
+            The <strong>DGToolbox Sensitivity Converter</strong> solves this by using precise <strong>360° distance
+                matching logic</strong>.
+            We calculate exactly how many centimeters your mouse needs to move to turn a full circle in your current
+            game,
+            and then generate the mathematically perfect sensitivity value for your target game.
+        </p>
+
+        <div class="seo-grid">
+            <section>
+                <h2>How to convert your sensitivity?</h2>
+                <ol style="margin-top: 20px; padding-left: 20px; font-size: 1.1rem; color: #fff;">
+                    <li style="margin-bottom: 10px;">Select your <strong>Source Game</strong> (e.g., Valorant).</li>
+                    <li style="margin-bottom: 10px;">Enter your current <strong>Sensitivity</strong> and
+                        <strong>DPI</strong>.
+                    </li>
+                    <li style="margin-bottom: 10px;">Select the <strong>Target Game</strong> you want to play (e.g.,
+                        CS2).</li>
+                    <li style="margin-bottom: 10px;">Enter the <strong>DPI</strong> you will use for the new game
+                        (usually keep it the same).</li>
+                    <li>Copy the <strong>Converted Value</strong> and paste it into your game settings.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h2>Frequently Asked Questions</h2>
+
+                <div class="faq-item">
+                    <span class="faq-q">Q: Is this converter accurate for Valorant to CS2?</span>
+                    The conversion is mathematically exact based on the yaw values of the Unreal Engine (Valorant) and
+                    Source 2 engine (CS2). Valorant sensitivity / 3.1818 = CS2 Sensitivity.
+                </div>
+
+                <div class="faq-item">
+                    <span class="faq-q">Q: Does changing DPI affect the conversion?</span>
+                    Yes! If you change your mouse DPI, your effective sensitivity (eDPI) changes. Our tool allows you to
+                    input different DPI values for source and target to compensate automatically.
+                </div>
+            </section>
+        </div>
+
+        <h2 style="margin-top: 60px;">Optimize Your Gaming Setup</h2>
+        <div class="internal-links">
+            <a href="aim-trainer.html" class="link-card">
+                <span class="link-title"><i class="fas fa-crosshairs"></i> Aim Trainer (Cyber.Aim)</span>
+                <span class="link-desc">Warm up your aim with our glitch-style browser aim trainer.</span>
+            </a>
+            <a href="controller-tester.html" class="link-card">
+                <span class="link-title"><i class="fas fa-gamepad"></i> Gamepad Tester</span>
+                <span class="link-desc">Check your controller for drift, input lag, and deadzones.</span>
+            </a>
+            <a href="reaction-tester.html" class="link-card">
+                <span class="link-title"><i class="fas fa-bolt"></i> Reaction Time Test</span>
+                <span class="link-desc">Measure your raw visual reflex speed in milliseconds.</span>
+            </a>
+        </div>
+    </article>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/sensitivity-converter-specific.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarizer | Online Offline Tool | DGToolbox</title>
+    <meta name="description" content="Use our free, offline Text Summarizer directly in your browser. 100% secure, zero tracing, client-side processing.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AI Text Summarizer - Summarize Any Text Instantly">
+    <meta property="og:description" content="Generate concise summaries of long articles and documents with AI.">
+    <meta property="og:url" content="https://dgtoolbox.com/text-summarizer.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/summarizer-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Instant AI Text Summarizer">
+    <meta name="twitter:description"
+        content="Get the gist of any text in seconds using our advanced AI summarization tool.">
+
+    <link rel="canonical" href="https://dgtoolbox.com/text-summarizer.html">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox AI Summarizer",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web",
+        "description": "An AI-powered tool to summarize long text into concise, readable summaries.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "Instant Summary, Adjustable Length, Keyword Extraction, Speech Synthesis",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="css/text-summarizer-specific.css">
+</head>
+
+<body>
+
+    <header class="mini-header">
+        <div class="header-title">
+            <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+            <span class="tool-name">AI Summarizer</span>
+        </div>
+        <div class="header-actions">
+            <div id="toolStatsBar" class="tool-stats-bar" style="margin-right: 1rem;"></div>
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span>Exit Tool</span></a>
+        </div>
+    </header>
+
+    <main class="main-container">
+
+        <!-- Left Panel: Input -->
+        <section class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fas fa-file-alt"></i> Source Text
+                </div>
+                <div class="toolbar">
+                    <button class="tool-btn" id="btn-paste" title="Paste from Clipboard"><i class="fas fa-paste"></i>
+                        Paste</button>
+                    <button class="tool-btn" id="btn-import" title="Upload File"><i class="fas fa-upload"></i>
+                        Import</button>
+                    <button class="tool-btn" id="btn-clear" title="Clear Text"><i class="fas fa-eraser"></i></button>
+                    <input type="file" id="file-upload" accept=".txt,.md" style="display: none;">
+                </div>
+            </div>
+
+            <div class="editor-wrapper">
+                <textarea id="input-text"
+                    placeholder="Paste your article, essay, or research paper here to detect key insights..."></textarea>
+            </div>
+
+            <div class="range-wrapper">
+                <span style="font-size: 0.9rem; color: #aaa;">Summary Length:</span>
+                <input type="range" id="summary-length" min="1" max="10" value="5">
+                <span id="length-label"
+                    style="min-width: 80px; text-align: right; color: var(--neon-accent); font-weight: 600;">Balanced</span>
+            </div>
+
+            <div
+                style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.8rem; color: #666;">
+                <span id="stat-input-words">0 words</span>
+                <span id="stat-input-chars">0 chars</span>
+            </div>
+
+            <button class="generate-btn" id="btn-summarize">
+                <i class="fas fa-magic"></i> Summarize Text
+            </button>
+        </section>
+
+        <!-- Right Panel: Output -->
+        <section class="panel">
+            <div class="loader-overlay" id="ai-loader">
+                <div class="neural-ring"></div>
+                <h3>Synthesizing Content...</h3>
+                <p style="color: #888; font-size: 0.9rem;">Analysing Semantic Structure</p>
+            </div>
+
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fas fa-layer-group"></i> Intelligence Report
+                </div>
+                <div class="toolbar">
+                    <button class="tool-btn" id="btn-speak"><i class="fas fa-volume-up"></i> Listen</button>
+                    <button class="tool-btn" id="btn-copy"><i class="fas fa-copy"></i> Copy</button>
+                    <button class="tool-btn" id="btn-download"><i class="fas fa-download"></i> Save</button>
+                </div>
+            </div>
+
+            <div class="output-wrapper" id="output-text">
+                <div style="color: rgba(255,255,255,0.3); text-align: center; margin-top: 20%;">
+                    <i class="fas fa-sparkles" style="font-size: 2rem; margin-bottom: 1rem;"></i><br>
+                    AI summary will appear here.<br>
+                    Ready to process your content.
+                </div>
+            </div>
+
+            <div class="keywords-area" id="keywords-container">
+                <!-- Keywords will be injected here -->
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item" id="stat-reduction"><i class="fas fa-compress-arrows-alt"></i> 0% Reduced</div>
+                <div class="stat-item" id="stat-reading-time"><i class="fas fa-clock"></i> 0 min read</div>
+            </div>
+        </section>
+
+        <!-- SEO Content Panel -->
+        <section class="panel" style="grid-column: 1 / -1; margin-top: 2rem;">
+            <div class="panel-header" style="margin-bottom: 1rem;">
+                <div class="panel-title">
+                    <i class="fas fa-search"></i> Why use an AI Summarizer?
+                </div>
+            </div>
+            <div style="color: #ccc; line-height: 1.8; font-size: 1rem;">
+                <p style="margin-bottom: 1.5rem;">
+                    In today's fast-paced world, reading through lengthy reports, research papers, or news articles can
+                    be time-consuming.
+                    <strong>DGToolbox AI Summarizer</strong> uses advanced Natural Language Processing (NLP) to extract
+                    the most critical information
+                    from any text, giving you the essence in seconds.
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 0.5rem;">For Students</h4>
+                        <p>Quickly understand the main points of academic papers, essays, and textbooks without reading
+                            every word.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 0.5rem;">For Professionals</h4>
+                        <p>Turn long meeting minutes, reports, or emails into actionable executive summaries.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #fff; margin-bottom: 0.5rem;">For Writers</h4>
+                        <p>Generate abstracts, synopsis, or "TL;DR" (Too Long; Didn't Read) sections for your blog
+                            posts.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/text-summarizer.js"></script>
+</body>
+
+</html>

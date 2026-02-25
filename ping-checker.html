@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Ping & Status Checker | Latency Test | DGToolbox</title>
+    <meta name="description" content="Check website latency and response time instantly. Fast, precise ping tester for developers and network admins.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Website Ping & Status Checker | Latency Test | DGToolbox">
+    <meta property="og:description" content="Check website latency and response time instantly. Fast, precise ping tester for developers and network admins.">
+    <meta property="og:url" content="https://dgtoolbox.com/ping-checker.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/ping-checker-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Website Ping Checker">
+    <meta name="twitter:description" content="Is it down? Check latency now.">
+
+    <link rel="canonical" href="https://dgtoolbox.com/ping-checker.html">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox Ping Checker",
+        "applicationCategory": "NetworkApplication",
+        "operatingSystem": "Web",
+        "description": "A browser-based tool to check the response time (latency) of websites.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "Website Ping, Latency Measurement, Continuous Monitoring",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📡</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <header class="mini-header">
+        <div class="header-title">
+            <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+            <span class="tool-name" data-i18n="ping_title">Ping Checker</span>
+            <div id="toolLoader" class="loader"></div>
+        </div>
+        <div class="header-actions">
+            <div id="toolStatsBar" class="tool-stats-bar" style="margin-right: 1rem;"></div>
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span data-i18n="btn_exit">Exit
+                    Tool</span></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="tool-container" style="max-width: 800px; margin: 0 auto;">
+
+            <!-- Command Center Interface -->
+            <div class="ping-interface">
+
+                <!-- Top: Input Area -->
+                <div class="ping-controls">
+                    <div class="url-input-wrapper">
+                        <span class="protocol-prefix">https://</span>
+                        <input type="text" id="urlInput" placeholder="target.com"
+                            data-i18n-placeholder="ping_placeholder" value="google.com" spellcheck="false">
+                    </div>
+                    <button class="ping-trigger-btn" onclick="startPingSequence()">
+                        <i class="fas fa-satellite-dish"></i> <span data-i18n="ping_btn_start">INITIATE PING</span>
+                    </button>
+                </div>
+
+                <!-- Middle: Visualization & Stats -->
+                <div class="ping-dashboard">
+                    <!-- Left: Radar Visualizer -->
+                    <div class="radar-container">
+                        <div class="radar-sweep"></div>
+                        <div class="radar-grid"></div>
+                        <div class="radar-status" id="radarStatus" data-i18n="ping_status_ready">IDLE</div>
+                    </div>
+
+                    <!-- Right: Digital Readout -->
+                    <div class="digital-readout">
+                        <div class="readout-group">
+                            <span class="readout-label" data-i18n="ping_col_time">LATENCY</span>
+                            <div class="readout-value" id="pingValue">---</div>
+                            <span class="readout-unit">MS</span>
+                        </div>
+
+                        <div class="stats-row">
+                            <div class="mini-stat">
+                                <span class="label">MIN</span>
+                                <span class="value" id="minPing">--</span>
+                            </div>
+                            <div class="mini-stat">
+                                <span class="label" data-i18n="ping_stat_avg">AVG</span>
+                                <span class="value" id="avgPing">--</span>
+                            </div>
+                            <div class="mini-stat">
+                                <span class="label">MAX</span>
+                                <span class="value" id="maxPing">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom: Presets & Options -->
+                <div class="ping-footer">
+                    <div class="ping-presets">
+                        <span class="section-label">QUICK TARGETS:</span>
+                        <button onclick="setPreset('google.com')">GOOGLE</button>
+                        <button onclick="setPreset('cloudflare.com')">CLOUDFLARE</button>
+                        <button onclick="setPreset('discord.com')">DISCORD</button>
+                        <button onclick="setPreset('github.com')">GITHUB</button>
+                    </div>
+
+                    <div class="ping-options">
+                        <label class="cyber-checkbox">
+                            <input type="checkbox" id="continuousPing">
+                            <span class="checkmark"></span>
+                            <span data-i18n="ping_status_running">CONTINUOUS SCAN (5x)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Terminal Log -->
+                <div class="cyber-terminal" id="miniConsole">
+                    <div class="terminal-header">:: SYSTEM LOG ::</div>
+                    <div class="terminal-content" id="consoleContent">
+                        <div class="log-line" data-i18n="ping_status_ready">System ready. Awaiting target...</div>
+                    </div>
+                </div>
+
+                <!-- SEO Footer -->
+                <div class="seo-footer" style="padding-top: 2rem; color: #666; font-size: 0.9rem;">
+                    <h3 style="color: #fff; margin-bottom: 0.5rem;">How does this work?</h3>
+                    <p style="margin-bottom: 1rem;">
+                        This tool simulates a ping by making a <code>HEAD</code> request to the target server or
+                        attempting
+                        to load a resource from it. It measures the "Time to First Byte" (TTFB) or completion time.
+                    </p>
+                    <p>
+                        <strong>Note:</strong> Due to browser security policies (CORS), exact ICMP ping is not possible
+                        from a
+                        web page. This tool provides a "HTTP Latency" estimation which is close to real-world loading
+                        performance.
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <strong>Popular Targets:</strong> Google, Cloudflare, Discord, GitHub.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="js/audio-manager.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/ping-checker.js"></script>
+</body>
+
+</html>

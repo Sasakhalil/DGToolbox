@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Crosshair Generator | Valorant & CS2 | DGToolbox</title>
+    <meta name="description" content="Design and preview custom crosshairs for Valorant and CS2 on multiple backgrounds. Get the competitive edge.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Custom Crosshair Generator | Valorant & CS2 | DGToolbox">
+    <meta property="og:description" content="Design and preview custom crosshairs for Valorant and CS2 on multiple backgrounds. Get the competitive edge.">
+    <meta property="og:url" content="https://dgtoolbox.com/crosshair-generator.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/crosshair-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Crosshair Generator | DGToolbox">
+    <meta name="twitter:description" content="Create, test, and share your perfect FPS crosshair settings.">
+
+    <link rel="canonical" href="https://dgtoolbox.com/crosshair-generator.html">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox Crosshair Labs",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web",
+        "description": "A visual crosshair generator and editor for FPS games like Valorant and CS2.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "Visual Editor, Map Preview, Pro Presets, Code Export",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Chakra+Petch:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/crosshair-generator-specific.css">
+</head>
+
+<body>
+
+    <div class="code-modal" id="exportModal">
+        <div class="code-box">
+            <h3 style="margin-top:0;">CONFIG EXPORT</h3>
+            <p style="font-size:0.9rem; color:var(--text-muted);">Copy this code into your console or autoexec.</p>
+            <textarea class="code-area" id="exportContent" readonly></textarea>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-main" onclick="app.copyExport()">COPY TO CLIPBOARD</button>
+                <button class="btn-main" onclick="document.getElementById('exportModal').classList.remove('active')"
+                    style="background:transparent; border:1px solid var(--hud-border); color: #fff;">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="lab-container">
+
+        <!-- LEFT PANEL -->
+        <div class="panel-left">
+            <a href="index.html" class="back-nav"><i class="fas fa-chevron-left"></i> RETURN TO BASE</a>
+
+            <div class="brand-header">
+                <h1>CROSSHAIR <span>LABS</span></h1>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">ADVANCED GENERATOR V9.0</div>
+            </div>
+
+            <div class="section-title">
+                PRO PRESETS
+            </div>
+            <div class="preset-grid">
+                <div class="preset-card" onclick="app.loadPreset('tenz')">
+                    <div style="font-size:1.5rem; color:#00ffbc;"><i class="fas fa-crosshairs"></i></div>
+                    <div class="preset-name">TENZ</div>
+                </div>
+                <div class="preset-card" onclick="app.loadPreset('s1mple')">
+                    <div style="font-size:1.5rem; color:#ffdd00;"><i class="fas fa-crosshairs"></i></div>
+                    <div class="preset-name">S1MPLE</div>
+                </div>
+                <div class="preset-card" onclick="app.loadPreset('dot')">
+                    <div style="font-size:1.5rem; color:#ff4655;"><i class="fas fa-dot-circle"></i></div>
+                    <div class="preset-name">DOT</div>
+                </div>
+                <div class="preset-card" onclick="app.loadPreset('circle')">
+                    <div style="font-size:1.5rem; color:#fff;"><i class="far fa-circle"></i></div>
+                    <div class="preset-name">CIRCLE</div>
+                </div>
+                <div class="preset-card" onclick="app.loadPreset('shroud')">
+                    <div style="font-size:1.5rem; color:#00aaff;"><i class="fas fa-plus"></i></div>
+                    <div class="preset-name">SHROUD</div>
+                </div>
+                <div class="preset-card" onclick="app.loadPreset('default')">
+                    <div style="font-size:1.5rem; color:#aaa;"><i class="fas fa-compress-arrows-alt"></i></div>
+                    <div class="preset-name">DEFAULT</div>
+                </div>
+            </div>
+
+            <div class="section-title">BACKGROUND ENV.</div>
+            <select id="bgSelect"
+                style="width:100%; padding: 10px; background:#000; color:#fff; border:1px solid var(--hud-border); margin-bottom:20px;">
+                <option value="grid">TACTICAL GRID (DEFAULT)</option>
+                <option value="dust2">DUST II (WARM)</option>
+                <option value="icebox">ICEBOX (COLD)</option>
+                <option value="ascent">ASCENT (NEUTRAL)</option>
+                <option value="night">NIGHT OPS</option>
+            </select>
+
+            <div class="control-block">
+                <div class="cb-header">TESTING SIMULATION</div>
+                <button class="btn-main" style="margin-bottom:10px; font-size:0.8rem;" onmousedown="app.simRecoil(true)"
+                    onmouseup="app.simRecoil(false)">HOLD: RECOIL TEST</button>
+                <button class="btn-main" style="background:#222; color:#fff; border:1px solid #333; font-size:0.8rem;"
+                    onclick="app.toggleMove()">TOGGLE: MOVEMENT</button>
+            </div>
+
+        </div>
+
+        <div class="brand-header" style="margin-top: 40px; border-bottom: none; padding-bottom: 0;">
+            <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+                <strong style="color: #fff;">Why Custom Crosshairs?</strong><br>
+                A tailored crosshair improves visibility and aim consistency.
+                Use <strong>Cyan</strong> or <strong>Green</strong> for contrast on most maps (Ascent, Dust 2).
+                Small <strong>dots</strong> are precise for headshots, while <strong>crosses</strong> help with spray
+                control.
+            </div>
+            <div style="margin-top: 20px; font-size: 0.75rem; color: #555;">
+                Supported: Valorant, CS2, Apex, Overwatch 2.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CENTER PANEL -->
+    <div class="panel-center">
+        <div class="preview-bg bg-grid" id="previewBg"></div>
+        <canvas id="cvs" width="800" height="800" style="width: 100%; height: 100%; display: block;"></canvas>
+
+        <div class="floating-toolbar">
+            <button class="ft-btn" onclick="app.zoom(-0.2)" title="Zoom Out"><i class="fas fa-minus"></i></button>
+            <span style="display:flex;align-items:center;color:#fff;font-size:0.9rem;">ZOOM</span>
+            <button class="ft-btn" onclick="app.zoom(0.2)" title="Zoom In"><i class="fas fa-plus"></i></button>
+            <div style="width:1px; height:20px; background:rgba(255,255,255,0.2); margin: 0 5px;"></div>
+            <button class="ft-btn" onclick="app.center()" title="Re-Center"><i class="fas fa-crosshairs"></i></button>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="panel-right">
+
+        <div class="config-tabs">
+            <button class="tab-btn active" onclick="app.switchTab('general')">GENERAL</button>
+            <button class="tab-btn" onclick="app.switchTab('inner')">INNER</button>
+            <button class="tab-btn" onclick="app.switchTab('outer')">OUTER</button>
+        </div>
+
+        <div class="config-content">
+
+            <!-- GENERAL TAB -->
+            <div id="tab-general" class="tab-pane active">
+
+                <div class="control-block">
+                    <div class="cb-header">
+                        <span>CROSSHAIR COLOR</span>
+                        <span id="hex-display">#00ffbc</span>
+                    </div>
+                    <div class="color-row">
+                        <div class="color-preset" style="background:#00ffbc" onclick="app.setColor('#00ffbc')">
+                        </div>
+                        <div class="color-preset" style="background:#00ff00" onclick="app.setColor('#00ff00')">
+                        </div>
+                        <div class="color-preset" style="background:#ffff00" onclick="app.setColor('#ffff00')">
+                        </div>
+                        <div class="color-preset" style="background:#00ffff" onclick="app.setColor('#00ffff')">
+                        </div>
+                        <div class="color-preset" style="background:#ff00ff" onclick="app.setColor('#ff00ff')">
+                        </div>
+                        <div class="color-preset" style="background:#ff4655" onclick="app.setColor('#ff4655')">
+                        </div>
+                        <div class="color-preset" style="background:#ffffff" onclick="app.setColor('#ffffff')">
+                        </div>
+                        <input type="color" id="customColor" oninput="app.setColor(this.value)"
+                            style="width:24px; height:24px; padding:0; border:none;">
+                    </div>
+                </div>
+
+                <div class="control-block">
+                    <div class="cb-header">OUTLINES</div>
+                    <div class="field-row">
+                        <label class="field-label">Enable</label>
+                        <label class="switch-toggle">
+                            <input type="checkbox" id="outline-on" onchange="app.update()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Opacity</label>
+                        <input type="range" id="outline-alpha" min="0" max="1" step="0.1" value="0.5"
+                            oninput="app.update()">
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Thickness</label>
+                        <input type="range" id="outline-thick" min="0" max="3" step="1" value="1"
+                            oninput="app.update()">
+                    </div>
+                </div>
+
+                <div class="control-block">
+                    <div class="cb-header">CENTER DOT</div>
+                    <div class="field-row">
+                        <label class="field-label">Enable</label>
+                        <label class="switch-toggle">
+                            <input type="checkbox" id="dot-on" onchange="app.update()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Opacity</label>
+                        <input type="range" id="dot-alpha" min="0" max="1" step="0.1" value="1" oninput="app.update()">
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Thickness</label>
+                        <input type="range" id="dot-thick" min="1" max="6" step="1" value="2" oninput="app.update()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- INNER LINES TAB -->
+            <div id="tab-inner" class="tab-pane">
+                <div class="control-block">
+                    <div class="cb-header">
+                        <span>INNER LINES</span>
+                        <label class="switch-toggle">
+                            <input type="checkbox" id="inner-on" checked onchange="app.update()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="field-row">
+                        <label class="field-label">Opacity</label>
+                        <input type="range" id="inner-alpha" min="0" max="1" step="0.05" value="0.8"
+                            oninput="app.update()">
+                        <div class="num-val" id="val-inner-alpha">0.8</div>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Lenth</label>
+                        <input type="range" id="inner-len" min="0" max="20" step="1" value="6" oninput="app.update()">
+                        <div class="num-val" id="val-inner-len">6</div>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Thickness</label>
+                        <input type="range" id="inner-thick" min="1" max="10" step="1" value="2" oninput="app.update()">
+                        <div class="num-val" id="val-inner-thick">2</div>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Offset</label>
+                        <input type="range" id="inner-offset" min="0" max="20" step="1" value="3"
+                            oninput="app.update()">
+                        <div class="num-val" id="val-inner-offset">3</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OUTER LINES TAB -->
+            <div id="tab-outer" class="tab-pane">
+                <div class="control-block">
+                    <div class="cb-header">
+                        <span>OUTER LINES</span>
+                        <label class="switch-toggle">
+                            <input type="checkbox" id="outer-on" onchange="app.update()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="field-row">
+                        <label class="field-label">Opacity</label>
+                        <input type="range" id="outer-alpha" min="0" max="1" step="0.05" value="0.35"
+                            oninput="app.update()">
+                        <div class="num-val" id="val-outer-alpha">0.35</div>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Length</label>
+                        <input type="range" id="outer-len" min="0" max="10" step="1" value="2" oninput="app.update()">
+                        <div class="num-val" id="val-outer-len">2</div>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Thickness</label>
+                        <input type="range" id="outer-thick" min="1" max="10" step="1" value="2" oninput="app.update()">
+                        <div class="num-val" id="val-outer-thick">2</div>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Offset</label>
+                        <input type="range" id="outer-offset" min="0" max="40" step="1" value="10"
+                            oninput="app.update()">
+                        <div class="num-val" id="val-outer-offset">10</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel-footer">
+            <button class="btn-secondary" onclick="app.loadPreset('default')" title="Reset to Default">
+                <i class="fas fa-undo"></i>
+            </button>
+            <button class="btn-main" onclick="app.exportConfig()">
+                <i class="fas fa-file-code"></i> GENERATE CONFIG
+            </button>
+        </div>
+    </div>
+    </div>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/crosshair-generator-specific.js"></script>
+</body>
+
+</html>

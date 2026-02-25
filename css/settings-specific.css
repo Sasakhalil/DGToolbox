@@ -1,0 +1,185 @@
+.settings-section {
+            background: var(--surface-color);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-dark), var(--shadow-light);
+        }
+
+        .settings-section h2 {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .color-swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .color-swatch:hover,
+        .color-swatch.active {
+            transform: scale(1.1);
+            border-color: #fff;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-color);
+            transition: .4s;
+            border-radius: 34px;
+            box-shadow: var(--shadow-inset);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--text-secondary);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+            background-color: #fff;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .theme-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 12px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .theme-card.active {
+            background: rgba(var(--accent-rgb), 0.15);
+            border: 1px solid var(--accent-color);
+        }
+
+        .theme-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .theme-card:hover .theme-preview {
+            transform: scale(1.1);
+        }
+
+        .theme-card span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .theme-card.active span {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Mobile Warning Overlay */
+        #mobile-warning-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            color: #ff3333;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        #mobile-warning-overlay h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            color: #fff;
+        }
+
+        #mobile-warning-overlay p {
+            color: #888;
+            margin-bottom: 2rem;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        #mobile-warning-overlay button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            border-radius: 4px;
+        }
+
+        #mobile-warning-overlay button:hover {
+            background: #fff;
+            color: #000;
+        }

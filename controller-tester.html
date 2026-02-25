@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gamepad & Controller Tester | Stick Drift Check | DGToolbox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Test your Xbox, PlayStation, or generic gamepad. Check buttons, triggers, and diagnose analog stick drift directly in browser.">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;800&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="canonical" href="https://dgtoolbox.com/controller-tester.html">
+
+    
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Gamepad & Controller Tester | Stick Drift Check | DGToolbox">
+    <meta property="og:description" content="Test your Xbox, PlayStation, or generic gamepad. Check buttons, triggers, and diagnose analog stick drift directly in browser.">
+    <meta property="og:url" content="https://dgtoolbox.com/controller-tester.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/controller-tester-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pro Gamepad Tester">
+    <meta name="twitter:description" content="Check for drift and measure input lag instantly.">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox Controller Tester",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web",
+        "description": "A comprehensive gamepad testing tool for diagnosing stick drift, input errors, and measuring polling rate.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "Drift Analysis, Polling Rate (Hz) Test, Vibration Test, Input Visualizer",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+
+    <link rel="stylesheet" href="css/controller-tester-specific.css">
+</head>
+
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- UI ROOT -->
+    <div class="titan-grid">
+
+        <aside class="sidebar">
+            <div class="brand-lockup">
+                <div class="brand-icon"><i class="fas fa-gamepad"></i></div>
+                <div class="brand-text">TITAN <span
+                        style="font-size:0.5em; opacity:0.5; border:1px solid #666; padding:2px 4px; border-radius:4px; vertical-align:middle;">MK-II</span>
+                </div>
+            </div>
+
+            <nav>
+                <div class="nav-item active" onclick="app.nav('dashboard')">
+                    <i class="fas fa-chart-pie"></i> <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="app.nav('flight-check')">
+                    <i class="fas fa-tasks"></i> <span>Flight Check</span>
+                </div>
+                <div class="nav-item" onclick="app.nav('drift')">
+                    <i class="fas fa-bullseye"></i> <span>Drift Lab</span>
+                </div>
+                <div class="nav-item" onclick="app.nav('haptics')">
+                    <i class="fas fa-wave-square"></i> <span>Haptics</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='index.html'"
+                    style="margin-top: 2rem; color: var(--neon-alert); border-color: rgba(255,0,60,0.1);">
+                    <i class="fas fa-power-off"></i> <span>Disconnect</span>
+                </div>
+            </nav>
+
+            <div class="status-module">
+                <div class="sm-row cx-status">
+                    <div id="st-led" class="cx-led"></div>
+                    <span id="st-state">SEARCHING</span>
+                </div>
+                <div class="sm-row">
+                    <span class="sm-label">DEVICE ID</span>
+                </div>
+                <div class="sm-val" id="st-id" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">--
+                </div>
+
+                <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                    <div class="sm-row">
+                        <span class="sm-label">POLLING RATE</span>
+                        <span class="sm-val" style="color:var(--neon-primary)" id="st-hz">0 Hz</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="stage">
+
+            <!-- 1. DASHBOARD -->
+            <div id="view-dashboard" class="view-layer active">
+                <h1 class="mk-header">COMMAND CENTER</h1>
+                <span class="mk-sub">LIVE INPUT TELEMETRY & VISUALIZATION</span>
+
+                <div class="mk-card viz-wrapper">
+                    <!-- High Fidelity SVG Controller -->
+                    <svg viewBox="0 0 800 500" width="100%" height="100%" style="overflow:visible;">
+                        <defs>
+                            <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#1a1d26;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0f1116;stop-opacity:1" />
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="4.5" result="coloredBlur" />
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+
+                        <!-- Body -->
+                        <path class="gp-body" fill="url(#bodyGrad)"
+                            d="M220,100 C220,40 280,40 280,40 L520,40 C520,40 580,40 580,100 L600,240 C620,380 480,420 480,420 L400,380 L320,420 C320,420 180,380 200,240 Z" />
+
+                        <!-- Bumpers -->
+                        <path id="v-l1" class="gp-btn"
+                            d="M240,50 L310,50 C320,50 320,70 310,70 L240,70 C230,70 230,50 240,50 Z" />
+                        <path id="v-r1" class="gp-btn"
+                            d="M490,50 L560,50 C570,50 570,70 560,70 L490,70 C480,70 480,50 490,50 Z" />
+
+                        <!-- Triggers -->
+                        <path class="gp-trig" d="M240,20 L310,20 L310,40 L240,40 Z" />
+                        <rect id="v-l2" class="gp-trig-fill" x="240" y="20" width="70" height="20" />
+
+                        <path class="gp-trig" d="M490,20 L560,20 L560,40 L490,40 Z" />
+                        <rect id="v-r2" class="gp-trig-fill" x="490" y="20" width="70" height="20" />
+
+                        <!-- D-Pad -->
+                        <g transform="translate(280, 200)">
+                            <path id="v-up" class="gp-btn" d="M-15,-20 L15,-20 L15,-50 L-15,-50 Z" /> <!-- Up -->
+                            <path id="v-down" class="gp-btn" d="M-15,20 L15,20 L15,50 L-15,50 Z" /> <!-- Down -->
+                            <path id="v-left" class="gp-btn" d="M-20,-15 L-20,15 L-50,15 L-50,-15 Z" /> <!-- Left -->
+                            <path id="v-right" class="gp-btn" d="M20,-15 L20,15 L50,15 L50,-15 Z" /> <!-- Right -->
+                        </g>
+
+                        <!-- Face Buttons -->
+                        <g transform="translate(520, 200)">
+                            <circle id="v-b" cx="0" cy="40" r="14" class="gp-btn" /> <!-- X/A (Bot) -->
+                            <circle id="v-r" cx="40" cy="0" r="14" class="gp-btn" /> <!-- O/B (Right) -->
+                            <circle id="v-l" cx="-40" cy="0" r="14" class="gp-btn" /> <!-- Sq/X (Left) -->
+                            <circle id="v-t" cx="0" cy="-40" r="14" class="gp-btn" /> <!-- Tri/Y (Top) -->
+                            <!-- Labels -->
+                            <text x="0" y="44" text-anchor="middle" fill="#555" font-size="10" font-family="Arial"
+                                font-weight="bold">A</text>
+                            <text x="40" y="4" text-anchor="middle" fill="#555" font-size="10" font-family="Arial"
+                                font-weight="bold">B</text>
+                        </g>
+
+                        <!-- Central -->
+                        <rect id="v-sel" x="360" y="200" width="25" height="12" rx="4" class="gp-btn" />
+                        <rect id="v-start" x="415" y="200" width="25" height="12" rx="4" class="gp-btn" />
+                        <circle id="v-home" cx="400" cy="240" r="10" class="gp-btn" />
+
+                        <!-- Sticks -->
+                        <g transform="translate(320, 300)">
+                            <circle class="stick-base" cx="0" cy="0" r="35" />
+                            <circle id="v-ls" class="stick-top" cx="0" cy="0" r="28" />
+                        </g>
+                        <g transform="translate(480, 300)">
+                            <circle class="stick-base" cx="0" cy="0" r="35" />
+                            <circle id="v-rs" class="stick-top" cx="0" cy="0" r="28" />
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Live Stream -->
+                <div
+                    style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px;">
+                    <!-- JS Injected Metrics -->
+                    <div id="metrics-dump"
+                        style="display:contents; color: #888; font-family: var(--f-code); font-size: 0.8rem;"></div>
+                </div>
+            </div>
+
+            <!-- SEO & INFO CONTENT (Visible in Dashboard) -->
+            <article
+                style="max-width: 900px; margin: 4rem auto; padding: 0 1rem; color: #888; font-family: var(--f-body); line-height: 1.6;">
+                <h2 style="font-family: var(--f-disp); color: #fff; font-size: 2rem; margin-bottom: 1rem;">Complete
+                    Gamepad Diagnostics</h2>
+                <p style="margin-bottom: 2rem;">
+                    The <strong>TITAN MK-II</strong> is a professional-grade <strong>gamepad tester</strong> designed to
+                    diagnose every aspect of your controller's performance.
+                    Whether you are competitive gamer needing to check for <strong>stick drift</strong> or a casual
+                    player ensuring your vibration motors work, this tool provides real-time telemetry.
+                </p>
+
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                    <div>
+                        <h3 style="color: var(--neon-primary); margin-bottom: 0.5rem; font-family: var(--f-disp);">Drift
+                            Analyzer</h3>
+                        <p>Analyze your analog sticks for centering errors. Our circular visualization highlights
+                            deviation from the perfect (0,0) center, helping you decide if you need to adjust your
+                            deadzones.</p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--neon-secondary); margin-bottom: 0.5rem; font-family: var(--f-disp);">
+                            Polling Rate Test</h3>
+                        <p>Measure the input latency and update frequency (Hz) of your device. A higher polling rate
+                            (e.g., 1000Hz) means lower input lag for competitive shooters.</p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--neon-success); margin-bottom: 0.5rem; font-family: var(--f-disp);">
+                            Haptics Engine</h3>
+                        <p>Test both high-frequency and low-frequency vibration motors. Customizable pulse duration
+                            helps verify if your controller's rumble features are fully functional.</p>
+                    </div>
+                </div>
+
+                <h2 style="font-family: var(--f-disp); color: #fff; font-size: 1.5rem; margin-bottom: 1rem;">Frequently
+                    Asked Questions</h2>
+                <div
+                    style="background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <strong style="color: #fff; display: block; margin-bottom: 0.5rem;">Q: Why is my controller not
+                        detected?</strong>
+                    <p style="margin-bottom: 1rem;">Press any button on your controller to wake it up. Browsers require
+                        a user interaction (button press) before they allow websites to access the Gamepad API.</p>
+
+                    <strong style="color: #fff; display: block; margin-bottom: 0.5rem;">Q: What is a good polling
+                        rate?</strong>
+                    <p style="margin-bottom: 0;">Standard console controllers usually poll at 125Hz or 250Hz. High-end
+                        PC controllers and overclocked gamepads can reach 1000Hz (1ms delay) for maximum responsiveness.
+                    </p>
+                </div>
+
+                <div style="margin-top: 3rem; border-top: 1px solid var(--glass-border); padding-top: 2rem;">
+                    <h3 style="font-family: var(--f-disp); color: #fff;">Related Tools</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="sensitivity-converter.html"
+                            style="color: var(--neon-primary); text-decoration: none; border-bottom: 1px solid transparent; transition: 0.2s;">Sensitivity
+                            Converter</a>
+                        <a href="aim-trainer.html"
+                            style="color: var(--neon-primary); text-decoration: none; border-bottom: 1px solid transparent; transition: 0.2s;">Aim
+                            Trainer</a>
+                        <a href="reaction-tester.html"
+                            style="color: var(--neon-primary); text-decoration: none; border-bottom: 1px solid transparent; transition: 0.2s;">Reaction
+                            Test</a>
+                    </div>
+                </div>
+            </article>
+
+    </div>
+
+    <!-- 2. FLIGHT CHECK -->
+    <div id="view-flight-check" class="view-layer">
+        <h1 class="mk-header">FLIGHT CHECK</h1>
+        <span class="mk-sub">GUIDED FUNCTIONALITY DIAGNOSTIC</span>
+
+        <div class="mk-card" style="border: 1px solid var(--neon-secondary);">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2 style="font-family: var(--f-disp);">TEST PROGRESS</h2>
+                <div
+                    style="height: 6px; background: #333; border-radius: 4px; margin: 10px auto; width: 60%; position:relative; overflow:hidden;">
+                    <div id="fc-bar"
+                        style="height:100%; width:0%; background: var(--neon-success); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                    </div>
+                </div>
+                <div id="fc-status" style="color: var(--neon-success); font-family:var(--f-code);">WAITING TO
+                    START...</div>
+            </div>
+
+            <div class="check-grid" id="fc-grid">
+                <!-- Items Injected Here -->
+            </div>
+
+            <button class="nav-item active" style="margin: 2rem auto; width: fit-content;"
+                onclick="app.resetFlightCheck()">
+                <i class="fas fa-redo"></i> <span>RESET DIAGNOSTIC</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. DRIFT LAB -->
+    <div id="view-drift" class="view-layer">
+        <h1 class="mk-header">DRIFT LAB</h1>
+        <span class="mk-sub">ANALOG STICK CENTERING PRECISION ANALYSIS</span>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <!-- Left -->
+            <div class="mk-card" style="text-align: center;">
+                <h3 style="color:var(--neon-primary); margin-bottom:1rem; font-family:var(--f-disp);">LEFT
+                    ANALOG</h3>
+                <div
+                    style="position:relative; width: 250px; height: 250px; margin:0 auto; background: radial-gradient(circle, #222 1px, transparent 2px); background-size: 25px 25px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1);">
+                    <canvas id="cv-l" width="250" height="250" style="position:absolute; top:0; left:0;"></canvas>
+                </div>
+                <div class="sm-val" id="val-l" style="margin-top:1rem;">X: 0.0000 | Y: 0.0000</div>
+                <div style="color:var(--neon-alert); font-size:0.8rem; margin-top:5px;" id="err-l">Error: 0.0%
+                </div>
+            </div>
+            <!-- Right -->
+            <div class="mk-card" style="text-align: center;">
+                <h3 style="color:var(--neon-secondary); margin-bottom:1rem; font-family:var(--f-disp);">RIGHT
+                    ANALOG</h3>
+                <div
+                    style="position:relative; width: 250px; height: 250px; margin:0 auto; background: radial-gradient(circle, #222 1px, transparent 2px); background-size: 25px 25px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1);">
+                    <canvas id="cv-r" width="250" height="250" style="position:absolute; top:0; left:0;"></canvas>
+                </div>
+                <div class="sm-val" id="val-r" style="margin-top:1rem;">X: 0.0000 | Y: 0.0000</div>
+                <div style="color:var(--neon-alert); font-size:0.8rem; margin-top:5px;" id="err-r">Error: 0.0%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. HAPTICS -->
+    <div id="view-haptics" class="view-layer">
+        <h1 class="mk-header">HAPTICS ENGINE</h1>
+        <span class="mk-sub">FORCE FEEDBACK CALIBRATION</span>
+
+        <div class="mk-card" style="max-width: 600px;">
+            <div style="margin-bottom: 2rem;">
+                <label class="sm-label">LOW FREQUENCY (RUMBLE)</label>
+                <input type="range" id="rumble-low" min="0" max="100" value="100">
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <label class="sm-label">HIGH FREQUENCY (BUZZ)</label>
+                <input type="range" id="rumble-high" min="0" max="100" value="50">
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <label class="sm-label">PULSE DURATION (MS)</label>
+                <input type="range" id="rumble-dur" min="100" max="2000" step="100" value="500">
+                <div style="text-align:right; font-family:var(--f-code); color:var(--neon-primary);" id="lbl-dur">500ms
+                </div>
+            </div>
+
+            <button class="nav-item active" style="justify-content:center; width:100%;" onclick="app.haptics.fire()">
+                <i class="fas fa-bolt"></i> FIRE TEST PULSE
+            </button>
+
+            <p style="text-align:center; font-size:0.8rem; color:#666; margin-top:1rem;">
+                Note: Requires a compatible browser (Chrome/Edge) and controller (Xbox/DS4).
+            </p>
+        </div>
+    </div>
+
+    </main>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="titan-toast"><i class="fas fa-info-circle"></i> <span>System Ready</span></div>
+
+    <!-- LOGIC MODULES -->
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controller-tester-specific.js"></script>
+</body>
+
+</html>

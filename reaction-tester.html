@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reflex & Reaction Time Tester | DGToolbox</title>
+    <meta name="description" content="Measure your reflex speed in milliseconds. The ultimate tool to test and improve your gaming reaction time.">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;600;800&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="canonical" href="https://dgtoolbox.com/reaction-tester.html">
+
+    
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Reflex & Reaction Time Tester | DGToolbox">
+    <meta property="og:description" content="Measure your reflex speed in milliseconds. The ultimate tool to test and improve your gaming reaction time.">
+    <meta property="og:url" content="https://dgtoolbox.com/reaction-tester.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/reaction-tester-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Reaction Time Test">
+    <meta name="twitter:description" content="How fast are you? Measure your reflexes now.">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Game",
+        "name": "DGToolbox Reflex Pro",
+        "description": "A reaction time testing tool to measure visual and auditory reflexes.",
+        "url": "https://dgtoolbox.com/reaction-tester.html",
+        "genre": ["Action", "Utility"],
+        "audience": {
+            "@type": "PeopleAudience",
+            "suggestedMinAge": "6"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+
+    <link rel="stylesheet" href="css/reaction-tester-specific.css">
+</head>
+
+<body class="mode-vis">
+
+    <div class="grid-floor"></div>
+
+    <!-- MAIN GAME COLUMN -->
+    <div class="main-col">
+        <header class="header">
+            <div class="brand"><i class="fas fa-bolt"></i> REFLEX PRO</div>
+            <div class="mode-dock">
+                <button class="mode-btn active" onclick="app.setMode('vis')"><i class="fas fa-eye"></i> Visual</button>
+                <button class="mode-btn" onclick="app.setMode('aud')"><i class="fas fa-wave-square"></i> Audio</button>
+            </div>
+            <!-- Mute Button -->
+            <button class="mode-btn" id="btn-mute" onclick="app.toggleMute()" style="border:none;">
+                <i class="fas fa-volume-up" id="icon-mute"></i>
+            </button>
+        </header>
+
+        <main class="arena-wrapper" id="arena" onmousedown="app.input(event)">
+            <!-- Aim Layer -->
+            <div id="aim-layer" style="position:absolute; inset:0; pointer-events:none;"></div>
+
+            <!-- UI -->
+            <div class="arena-overlay" id="ui-layer">
+                <h1 class="hero-text" id="ui-main">READY</h1>
+                <div class="hero-sub" id="ui-sub">TAP TO INITIATE</div>
+            </div>
+        </main>
+        <article
+            style="background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.1); padding: 2rem; border-radius: 8px; color: var(--text-dim); line-height: 1.6; margin-top: 2rem;">
+            <h1 style="color: #fff; font-size: 1.8rem; margin-bottom: 1rem;">Human Reaction Time Tester</h1>
+            <p style="margin-bottom: 1.5rem;">
+                <strong>Reflex Pro</strong> is a precise tool to measure your <strong>visual reaction time</strong>.
+                The average human reaction time is around <strong>200ms to 250ms</strong>. Pro gamers often clock in
+                between <strong>150ms and 180ms</strong>.
+            </p>
+            <h3 style="color: var(--accent-vis); margin-bottom: 0.5rem;">How to Interpret Your Score:</h3>
+            <ul style="margin-bottom: 2rem;">
+                <li><strong>&lt; 150ms:</strong> Godlike (F1 Driver / Pro Gamer)</li>
+                <li><strong>150 - 200ms:</strong> Excellent</li>
+                <li><strong>200 - 250ms:</strong> Average</li>
+                <li><strong>&gt; 250ms:</strong> Can improve with practice</li>
+            </ul>
+            <p>
+                Want to improve your gaming performance? Check out our <a href="aim-trainer.html"
+                    style="color: var(--accent-aim); text-decoration: none;">Aim Trainer</a> or test your hardware with
+                the <a href="controller-tester.html" style="color: var(--accent-aud); text-decoration: none;">Controller
+                    Tester</a>.
+            </p>
+        </article>
+    </div>
+
+    <!-- SIDEBAR COLUMN -->
+    <aside class="sidebar-col">
+        <a href="index.html" class="exit-btn">
+            <i class="fas fa-power-off"></i> System Exit
+        </a>
+
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="sb-val" id="disp-avg">--</div>
+                <div class="sb-lbl">AVG (MS)</div>
+            </div>
+            <div class="stat-box">
+                <div class="sb-val" id="disp-best" style="color:var(--accent-vis)">--</div>
+                <div class="sb-lbl">BEST</div>
+            </div>
+        </div>
+
+        <div class="stats-box"
+            style="text-align:center; padding:10px; border:1px solid rgba(255,255,255,0.1); border-radius:6px;">
+            <div class="sb-lbl">CURRENT RANK</div>
+            <div style="font-size:1.5rem; font-weight:800; margin-top:5px; color:#fff;" id="disp-rank">UNRANKED</div>
+        </div>
+
+        <div class="history-panel">
+            <div class="panel-title">
+                MISSION LOG
+                <button class="clear-btn" onclick="app.clearLog()">CLEAR</button>
+            </div>
+            <div class="log-list" id="log-list">
+                <!-- Log Items -->
+            </div>
+        </div>
+    </aside>
+
+    <script src="js/reaction-tester.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Encoder / Decoder | Text & Images | DGToolbox</title>
+    <meta name="description" content="Encode and decode Base64 data instantly. Supports text and images. 100% offline processing for maximum security.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Base64 Encoder / Decoder | Text & Images | DGToolbox">
+    <meta property="og:description" content="Encode and decode Base64 data instantly. Supports text and images. 100% offline processing for maximum security.">
+    <meta property="og:url" content="https://dgtoolbox.com/base64-tool.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/base64-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Base64 Converter Tool">
+    <meta name="twitter:description" content="Encode and decode Base64 strings and files safely in your browser.">
+
+    <link rel="canonical" href="https://dgtoolbox.com/base64-tool.html">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox Base64 Studio",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "description": "A developer tool for encoding and decoding text and files to/from Base64 format strings.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "Base64 Encoding, Base64 Decoding, File to Base64, Image Preview",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔄</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/base64-tool-specific.css">
+</head>
+
+<body>
+    <header class="mini-header">
+        <div class="header-title">
+            <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+            <span class="tool-name">Base64 Studio</span>
+        </div>
+        <div class="header-actions">
+            <div id="toolStatsBar" class="tool-stats-bar" style="margin-right: 1rem;"></div>
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span data-i18n="exit">Exit
+                    Tool</span></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="tool-container">
+
+            <!-- Mode Switcher -->
+            <div class="mode-switcher">
+                <button class="mode-btn active" onclick="setMode('text')" id="btn-text">
+                    <i class="fas fa-font"></i> <span data-i18n="b64_mode_text">Text Mode</span>
+                </button>
+                <button class="mode-btn" onclick="setMode('file')" id="btn-file">
+                    <i class="fas fa-file"></i> <span data-i18n="b64_mode_file">File Mode</span>
+                </button>
+            </div>
+
+            <!-- Text Mode Interface -->
+            <div id="textModeUI" class="studio-grid">
+
+                <!-- Input Panel -->
+                <div class="studio-panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fas fa-keyboard"></i> <span
+                                data-i18n="b64_label_input">Input</span></div>
+                        <div class="panel-actions">
+                            <button class="icon-action" onclick="pasteText()" title="Paste"
+                                data-i18n-title="json_msg_pasted"><i class="fas fa-paste"></i></button>
+                            <button class="icon-action" onclick="clearAll()" title="Clear"
+                                data-i18n-title="json_clear"><i class="fas fa-eraser"></i></button>
+                        </div>
+                    </div>
+                    <textarea id="inputText" class="studio-textarea" placeholder="Type or paste text here..."
+                        data-i18n-placeholder="b64_label_input" oninput="autoConvert()"></textarea>
+                </div>
+
+                <!-- Output Panel -->
+                <div class="studio-panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fas fa-code"></i> <span
+                                data-i18n="b64_label_output">Result</span></div>
+                        <div class="panel-actions">
+                            <button class="icon-action" onclick="copyResult()" title="Copy"
+                                data-i18n-title="json_msg_copied"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <textarea id="outputText" class="studio-textarea" readonly
+                        placeholder="Result will appear here..."></textarea>
+                </div>
+
+            </div>
+
+            <!-- File Mode Interface -->
+            <div id="fileModeUI" class="studio-grid hidden">
+
+                <!-- Input Panel -->
+                <div class="studio-panel">
+                    <div class="panel-header">
+                        <div class="panel-title" id="fileInputTitle"><i class="fas fa-file-upload"></i> <span
+                                data-i18n="b64_label_upload">Upload File</span>
+                        </div>
+                        <div class="panel-actions" id="fileInputActions">
+                            <!-- Actions injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Encode Mode: Drop Zone -->
+                    <div class="file-drop-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt file-icon"></i>
+                        <h3 data-i18n="b64_msg_drag">Click or Drag File Here</h3>
+                        <p data-i18n="b64_msg_supports">Supports Images, PDFs, Text, etc.</p>
+                        <input type="file" id="fileInput" class="hidden" onchange="handleFile(this.files[0])">
+                        <div id="fileInfo" class="file-info hidden"></div>
+                    </div>
+
+                    <!-- Decode Mode: Base64 Input -->
+                    <textarea id="inputBase64File" class="studio-textarea hidden"
+                        placeholder="Paste your Base64 string here..." data-i18n-placeholder="b64_label_string"
+                        oninput="previewFileFromBase64()"></textarea>
+                </div>
+
+                <!-- Output Panel -->
+                <div class="studio-panel">
+                    <div class="panel-header">
+                        <div class="panel-title" id="fileOutputTitle"><i class="fas fa-database"></i> <span
+                                data-i18n="b64_label_string">Base64 String</span>
+                        </div>
+                        <div class="panel-actions" id="fileOutputActions">
+                            <button class="icon-action" onclick="copyResult()" title="Copy"
+                                data-i18n-title="json_msg_copied"><i class="fas fa-copy"></i></button>
+                            <button class="icon-action" onclick="downloadBase64()" title="Download as .txt"
+                                data-i18n-title="img_btn_download"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Encode Mode: Base64 Output -->
+                    <textarea id="outputFileBase64" class="studio-textarea" readonly
+                        placeholder="Base64 string will appear here..."></textarea>
+
+                    <!-- Decode Mode: File Download Preview -->
+                    <div id="fileDownloadZone" class="file-drop-area hidden"
+                        style="cursor: default; border-style: solid;">
+                        <i class="fas fa-file-download file-icon" style="color: var(--text-primary);"></i>
+                        <h3 id="previewFileName">Ready to Decode</h3>
+                        <p id="previewFileType">Paste Base64 to see file info</p>
+                        <button class="action-pill primary" onclick="downloadDecodedFile()" id="btnDownloadFile"
+                            disabled style="margin-top: 1rem; opacity: 0.5; cursor: not-allowed;">
+                            <i class="fas fa-download"></i> <span data-i18n="img_btn_download">Download File</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Action Bar -->
+            <div class="action-bar">
+                <button class="action-pill primary" onclick="processConversion('encode')" id="btnEncode">
+                    <i class="fas fa-arrow-right"></i> <span data-i18n="b64_btn_encode">Encode</span>
+                </button>
+                <button class="action-pill" onclick="processConversion('decode')" id="btnDecode">
+                    <i class="fas fa-arrow-left"></i> <span data-i18n="b64_btn_decode">Decode</span>
+                </button>
+            </div>
+
+            <!-- SEO Footer -->
+            <div class="seo-footer"
+                style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); color: var(--text-secondary);">
+                <h2 style="color: var(--text-primary); margin-bottom: 1rem;">Base64 Encoding & Decoding Explained</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div>
+                        <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">What is Base64?</h3>
+                        <p style="margin-bottom: 1rem;">
+                            Base64 is a binary-to-text encoding scheme that represents binary data in an ASCII string
+                            format.
+                            It is commonly used to embed images directly into HTML/CSS, transmit data over media that
+                            deal with text (like email),
+                            and store complex data in JSON or XML.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">Secure & Client-Side</h3>
+                        <p>
+                            This <strong>Base64 Studio</strong> processes everything locally in your browser.
+                            If you upload a file to convert it to a Data URI, that file is <strong>never</strong>
+                            uploaded to our servers.
+                            It remains on your device, ensuring total privacy for sensitive documents or personal
+                            images.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/audio-manager.js"></script>
+    <script src="js/notification-manager.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/base64-tool.js"></script>
+</body>
+
+</html>

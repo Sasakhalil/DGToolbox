@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regular Expression (Regex) Tester | Live & Offline | DGToolbox</title>
+    <meta name="description" content="Test, debug, and learn Regular Expressions live in your browser. 100% secure client-side regex tool.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Regular Expression (Regex) Tester | Live & Offline | DGToolbox">
+    <meta property="og:description" content="Test, debug, and learn Regular Expressions live in your browser. 100% secure client-side regex tool.">
+    <meta property="og:url" content="https://dgtoolbox.com/regex-tester.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/regex-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Regular Expression Tester">
+    <meta name="twitter:description" content="Debug regex patterns instantly in your browser.">
+
+    <link rel="canonical" href="https://dgtoolbox.com/regex-tester.html">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox Regex Tester",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "description": "A developer tool for testing and debugging Regular Expressions (Regex) in real-time.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "Live Matching, Group Highlighting, Find & Replace, Regex Cheatsheet",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛠️</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/regex-tester-specific.css">
+</head>
+
+<body>
+    <header class="mini-header">
+        <div class="header-title">
+            <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+            <span class="tool-name" data-i18n="regex_title">Regex Tester</span>
+        </div>
+        <div class="header-actions">
+            <div id="toolStatsBar" class="tool-stats-bar" style="margin-right: 1rem;"></div>
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span data-i18n="exit">Exit
+                    Tool</span></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="tool-container" style="max-width: 1400px;">
+
+            <div class="regex-grid">
+                <!-- Left Column: Editor -->
+                <div class="main-column">
+                    <div class="regex-editor-card">
+
+                        <!-- Mode Toggles -->
+                        <div class="mode-toggles">
+                            <button class="mode-btn active" data-mode="match"><i class="fas fa-search"></i>
+                                <span data-i18n="regex_mode_match">Match</span></button>
+                            <button class="mode-btn" data-mode="replace"><i class="fas fa-exchange-alt"></i>
+                                <span data-i18n="regex_mode_replace">Replace</span></button>
+                        </div>
+
+                        <!-- Pattern Input -->
+                        <div class="input-section">
+                            <div class="section-header">
+                                <label data-i18n="regex_label_pattern">Regular Expression</label>
+                                <div class="flags-container">
+                                    <button class="flag-btn active" data-flag="g" title="Global search"
+                                        data-i18n-title="tip_regex_global">g</button>
+                                    <button class="flag-btn" data-flag="i" title="Case-insensitive"
+                                        data-i18n-title="tip_regex_case">i</button>
+                                    <button class="flag-btn" data-flag="m" title="Multiline"
+                                        data-i18n-title="tip_regex_multiline">m</button>
+                                    <button class="flag-btn" data-flag="s" title="Dot matches newline"
+                                        data-i18n-title="tip_regex_dot">s</button>
+                                    <button class="flag-btn" data-flag="u" title="Unicode"
+                                        data-i18n-title="tip_regex_unicode">u</button>
+                                </div>
+                            </div>
+                            <div class="regex-input-wrapper">
+                                <span class="slash">/</span>
+                                <input type="text" id="regexPattern" placeholder="..." spellcheck="false"
+                                    autocomplete="off">
+                                <span class="slash">/</span>
+                            </div>
+                            <!-- Live Explanation -->
+                            <div id="regexExplanation" class="regex-explanation">
+                                <i class="fas fa-info-circle"></i> <span id="explanationText"
+                                    data-i18n="regex_expl_placeholder">Enter a pattern...</span>
+                            </div>
+                        </div>
+
+                        <!-- Replace Input (Hidden by default) -->
+                        <div id="replaceSection" class="input-section" style="display: none;">
+                            <label data-i18n="regex_label_replace">Replacement String</label>
+                            <div class="regex-input-wrapper">
+                                <input type="text" id="replacePattern" placeholder="..." spellcheck="false"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+
+                        <!-- Test String -->
+                        <div class="test-area-wrapper">
+                            <div class="section-header">
+                                <label data-i18n="regex_label_test">Test String</label>
+                                <div class="action-buttons">
+                                    <button class="mini-btn" onclick="copyToClipboard('testString')" title="Copy Text"
+                                        data-i18n-title="tip_copy"><i class="fas fa-copy"></i></button>
+                                    <button class="mini-btn" onclick="clearText()" title="Clear Text"
+                                        data-i18n-title="tip_clear"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="test-area">
+                                <!-- Overlay for highlighting -->
+                                <div id="regexOutput"></div>
+                                <textarea id="testString" placeholder="..." spellcheck="false"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Replace Result (Hidden by default) -->
+                        <div id="replaceResultSection" class="test-area-wrapper" style="display: none;">
+                            <div class="section-header">
+                                <label data-i18n="regex_label_result">Replacement Result</label>
+                                <button class="mini-btn" onclick="copyToClipboard('replaceOutput')" title="Copy Result"
+                                    data-i18n-title="tip_copy"><i class="fas fa-copy"></i></button>
+                            </div>
+                            <div class="test-area result-area">
+                                <div id="replaceOutput"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Right Column: Sidebar -->
+                <div class="sidebar-column">
+                    <!-- Match Details -->
+                    <div class="sidebar-card">
+                        <div class="sidebar-title">
+                            <span><i class="fas fa-list-ul"></i> <span data-i18n="regex_matches">Matches</span></span>
+                            <span id="matchCountBadge" class="badge">0</span>
+                        </div>
+                        <div id="matchList" class="match-list">
+                            <div class="empty-state" data-i18n="regex_no_matches">No matches found</div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Cheatsheet -->
+                    <div class="sidebar-card">
+                        <div class="sidebar-title"><i class="fas fa-keyboard"></i> <span
+                                data-i18n="regex_quick_insert">Quick Insert</span></div>
+                        <div class="cheatsheet-grid">
+                            <button class="cs-btn" onclick="insertToken('.')"><span class="token">.</span> <span
+                                    class="desc">Any</span></button>
+                            <button class="cs-btn" onclick="insertToken('\\w')"><span class="token">\w</span> <span
+                                    class="desc">Word</span></button>
+                            <button class="cs-btn" onclick="insertToken('\\d')"><span class="token">\d</span> <span
+                                    class="desc">Digit</span></button>
+                            <button class="cs-btn" onclick="insertToken('\\s')"><span class="token">\s</span> <span
+                                    class="desc">Space</span></button>
+                            <button class="cs-btn" onclick="insertToken('[abc]')"><span class="token">[..]</span> <span
+                                    class="desc">Set</span></button>
+                            <button class="cs-btn" onclick="insertToken('^')"><span class="token">^</span> <span
+                                    class="desc">Start</span></button>
+                            <button class="cs-btn" onclick="insertToken('$')"><span class="token">$</span> <span
+                                    class="desc">End</span></button>
+                            <button class="cs-btn" onclick="insertToken('*')"><span class="token">*</span> <span
+                                    class="desc">0+</span></button>
+                            <button class="cs-btn" onclick="insertToken('+')"><span class="token">+</span> <span
+                                    class="desc">1+</span></button>
+                            <button class="cs-btn" onclick="insertToken('?')"><span class="token">?</span> <span
+                                    class="desc">Opt</span></button>
+                            <button class="cs-btn" onclick="insertToken('()')"><span class="token">()</span> <span
+                                    class="desc">Group</span></button>
+                            <button class="cs-btn" onclick="insertToken('|')"><span class="token">|</span> <span
+                                    class="desc">Or</span></button>
+                            <button class="cs-btn" onclick="insertToken('\\')"><span class="token">\</span> <span
+                                    class="desc">Esc</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO Footer -->
+            <div class="seo-footer"
+                style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); color: var(--text-secondary);">
+                <h2 style="color: var(--text-primary); margin-bottom: 1rem;">Master Regular Expressions</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div>
+                        <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">What is Regex?</h3>
+                        <p style="margin-bottom: 1rem;">
+                            A <strong>Regular Expression</strong> (regex) is a sequence of characters that specifies a
+                            search pattern.
+                            Regex is widely used for string searching, text replacement, and input validation (like
+                            email or password checks).
+                        </p>
+                    </div>
+                    <div>
+                        <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">About this Tool</h3>
+                        <p>
+                            This <strong>Regex Tester</strong> evaluates your patterns against a test string in
+                            real-time using the **JavaScript** regex engine.
+                            It supports standard flags like Global (<code>g</code>), Case Insensitive (<code>i</code>),
+                            and Multiline (<code>m</code>).
+                            Use the built-in <strong>cheatsheet</strong> to quickly insert common tokens.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="js/audio-manager.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/regex-tester.js"></script>
+</body>
+
+</html>

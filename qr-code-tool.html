@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create beautiful, custom QR codes offline. Generate QR for websites, Wi-Fi networks, and contact info securely.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Free QR Code Generator | URL, Wi-Fi, Text | DGToolbox">
+    <meta property="og:description" content="Create beautiful, custom QR codes offline. Generate QR for websites, Wi-Fi networks, and contact info securely.">
+    <meta property="og:url" content="https://dgtoolbox.com/qr-code-tool.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/qr-code-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="QR Studio Pro">
+    <meta name="twitter:description" content="Create beautiful, branded QR codes in seconds. 100% Free & Offline.">
+
+    <link rel="canonical" href="https://dgtoolbox.com/qr-code-tool.html">
+
+    <title>Free QR Code Generator | URL, Wi-Fi, Text | DGToolbox</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox QR Studio",
+        "applicationCategory": "DesignApplication",
+        "operatingSystem": "Any",
+        "description": "A professional QR code generator that supports various data types (URL, WiFi, Text) and customization (Colors, Logo Integration).",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "URL to QR, WiFi Configuration QR, Logo Upload, Custom Colors, High-Res PNG Download",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+
+    <!-- QRCode.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="css/qr-code-tool-specific.css">
+</head>
+
+<body>
+    <header class="mini-header">
+        <div class="header-title">
+            <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+            <span class="tool-name">QR Studio</span>
+        </div>
+        <div class="header-actions">
+            <div id="toolStatsBar" class="tool-stats-bar" style="margin-right: 1rem;"></div>
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span data-i18n="exit">Exit
+                    Tool</span></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="tool-container">
+
+            <div class="studio-grid">
+
+                <!-- Configuration Panel -->
+                <div class="config-card">
+
+                    <!-- Tabs -->
+                    <div class="type-tabs">
+                        <button class="tab-btn active" onclick="setMode('url')"><i class="fas fa-link"></i> URL</button>
+                        <button class="tab-btn" onclick="setMode('text')"><i class="fas fa-align-left"></i>
+                            <span data-i18n="qr_tab_text">Text</span></button>
+                        <button class="tab-btn" onclick="setMode('wifi')"><i class="fas fa-wifi"></i> Wi-Fi</button>
+                        <button class="tab-btn" onclick="setMode('email')"><i class="fas fa-envelope"></i>
+                            Email</button>
+                    </div>
+
+                    <!-- Dynamic Inputs -->
+                    <div id="inputContainer">
+                        <!-- Injected via JS -->
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 2rem 0;">
+
+                    <!-- Customization -->
+                    <div class="input-label"><i class="fas fa-paint-brush"></i> <span
+                            data-i18n="tool_shades">Customization</span></div>
+
+                    <div class="color-row">
+                        <div class="color-group">
+                            <label class="input-label" data-i18n="qr_fg_color">Foreground</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="colorDark" value="#000000" class="color-preview"
+                                    onchange="updateColor(this.value, 'dark')">
+                                <input type="text" id="textDark" value="#000000" class="color-text" readonly>
+                            </div>
+                        </div>
+                        <div class="color-group">
+                            <label class="input-label" data-i18n="qr_bg_color">Background</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="colorLight" value="#ffffff" class="color-preview"
+                                    onchange="updateColor(this.value, 'light')">
+                                <input type="text" id="textLight" value="#ffffff" class="color-text" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="logo-upload-area" onclick="document.getElementById('logoInput').click()">
+                        <i class="fas fa-image"
+                            style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-secondary);"></i>
+                        <div style="color: var(--text-secondary);" data-i18n="qr_logo_label">Click to Upload Logo
+                            (Center)</div>
+                        <input type="file" id="logoInput" accept="image/*" style="display: none;"
+                            onchange="handleLogoUpload(this)">
+                    </div>
+                    <div id="logoPreviewName"
+                        style="text-align: center; margin-top: -10px; margin-bottom: 1rem; color: var(--accent-color); font-size: 0.9rem;">
+                    </div>
+
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="preview-card">
+                    <div class="qr-frame" id="qrFrame">
+                        <div id="qrCodeContainer"></div>
+                        <!-- Logo Overlay -->
+                        <img id="qrLogoOverlay" src=""
+                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; display: none; background: white; padding: 2px; border-radius: 4px;">
+                    </div>
+
+                    <button class="download-btn" onclick="downloadQR()">
+                        <i class="fas fa-download"></i> <span data-i18n="qr_btn_download">Download PNG</span>
+                    </button>
+
+                    <div style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-top: 1rem;"
+                        data-i18n="qr_help_hires">
+                        High Resolution (1000x1000px)
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SEO Content Section -->
+            <article class="seo-content"
+                style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2rem; margin-top: 2rem; backdrop-filter: blur(12px); color: var(--text-secondary); line-height: 1.6;">
+                <h1 style="color: var(--text-primary); font-size: 1.8rem; margin-bottom: 1.5rem;">Professional QR Code
+                    Studio & Generator</h1>
+                <p style="margin-bottom: 2rem;">
+                    Create custom, branded <span style="color:var(--accent-color)">QR Codes</span> instantly with
+                    <strong>QR Studio</strong>.
+                    Whether you need to share a WiFi password, a website URL, or your contact info (vCard), our tool
+                    handles it all locally.
+                    Add your company logo, customize colors, and download high-resolution PNGs for print or web.
+                </p>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                    <div>
+                        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 1rem;">Supported Types
+                        </h3>
+                        <ul style="padding-left: 20px;">
+                            <li><strong>URL:</strong> Link to any website or landing page.</li>
+                            <li><strong>WiFi:</strong> Share network credentials securely (WPA/WPA2/WEP).</li>
+                            <li><strong>Text/Email:</strong> Share plain text or pre-filled email drafts.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 1rem;">Why This Tool?
+                        </h3>
+                        <ul style="padding-left: 20px;">
+                            <li><strong>Privacy First:</strong> QR codes are generated in your browser. No data
+                                tracking.</li>
+                            <li><strong>Custom Design:</strong> Match your brand colors and add logos.</li>
+                            <li><strong>Permanent:</strong> Static QR codes that never expire.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <section class="seo-tags" style="border-top: 1px solid var(--glass-border); padding-top: 2rem;">
+                    <h3 style="font-size: 1rem; color: var(--text-primary); margin-bottom: 1rem;">Popular Searches</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <span
+                            style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">Free
+                            QR Code Generator</span>
+                        <span
+                            style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">WiFi
+                            to QR</span>
+                        <span
+                            style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">QR
+                            Code with Logo</span>
+                        <span
+                            style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">Custom
+                            Color QR</span>
+                        <span
+                            style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">High
+                            Res QR PNG</span>
+                        <span
+                            style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">Offline
+                            QR Maker</span>
+                        <span
+                            style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">Secure
+                            QR Tool</span>
+                    </div>
+                </section>
+            </article>
+
+        </div>
+    </main>
+
+    <script src="js/audio-manager.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/qr-code-tool.js"></script>
+</body>
+
+</html>

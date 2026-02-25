@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk UUID/GUID Generator (v4) | DGToolbox</title>
+    <meta name="description" content="Generate secure, random UUIDs (version 4) instantly in your browser. No server requests, 100% offline.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Bulk UUID/GUID Generator (v4) | DGToolbox">
+    <meta property="og:description" content="Generate secure, random UUIDs (version 4) instantly in your browser. No server requests, 100% offline.">
+    <meta property="og:url" content="https://dgtoolbox.com/uuid-generator.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/uuid-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UUID & NanoID Generator">
+    <meta name="twitter:description" content="Create unique IDs instantly for your projects.">
+
+    <link rel="canonical" href="https://dgtoolbox.com/uuid-generator.html">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox UUID Studio",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "description": "A developer tool for generating Universally Unique Identifiers (UUID v4) and NanoIDs in bulk.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "UUID v4, NanoID, Bulk Generation, Custom Formats, Export",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🆔</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/uuid-generator-specific.css">
+</head>
+
+<body>
+    <header class="mini-header">
+        <div class="header-title">
+            <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+            <span class="tool-name">UUID Studio</span>
+        </div>
+        <div class="header-actions">
+            <div id="toolStatsBar" class="tool-stats-bar" style="margin-right: 1rem;"></div>
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span data-i18n="exit">Exit
+                    Tool</span></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="tool-container">
+
+            <div class="studio-grid">
+
+                <!-- Controls Sidebar -->
+                <div class="controls-card">
+
+                    <div class="control-group">
+                        <label class="control-label" data-i18n="uuid_label_type">ID Type</label>
+                        <div class="type-toggles">
+                            <button class="type-btn active" onclick="setType('uuid')" id="btn-uuid">UUID v4</button>
+                            <button class="type-btn" onclick="setType('nano')" id="btn-nano">NanoID</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label"><span data-i18n="uuid_label_qty">Quantity</span>: <span
+                                id="qtyDisplay">1</span></label>
+                        <div class="range-wrapper">
+                            <input type="range" id="qtySlider" class="range-slider" min="1" max="50" value="1"
+                                oninput="updateQty(this.value)">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" data-i18n="uuid_label_format">Format Options</label>
+                        <div class="options-grid">
+                            <label class="option-item">
+                                <input type="checkbox" id="optHyphens" checked> <span
+                                    data-i18n="uuid_opt_hyphens">Hyphens (-)</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" id="optUppercase"> <span
+                                    data-i18n="uuid_opt_upper">Uppercase</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" id="optBraces"> <span data-i18n="uuid_opt_braces">Braces
+                                    {}</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" id="optQuotes"> <span data-i18n="uuid_opt_quotes">Quotes
+                                    ""</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" id="optSingleQuotes"> <span data-i18n="uuid_opt_single">Single
+                                    Quotes ''</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" id="optComma"> <span data-i18n="uuid_opt_comma">Comma (,)</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" id="optNumbered"> <span data-i18n="uuid_opt_num">Numbered
+                                    (1.)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="generate-btn" onclick="generateIDs()">
+                        <i class="fas fa-bolt"></i> <span data-i18n="uuid_btn_gen">Generate</span>
+                    </button>
+
+                </div>
+
+                <!-- Output Area -->
+                <div class="output-card">
+                    <div class="output-header">
+                        <div class="panel-title" style="font-weight: 600; color: var(--text-secondary);">
+                            <i class="fas fa-list-ul"></i> <span data-i18n="uuid_title_output">Generated IDs</span>
+                        </div>
+                        <div class="output-actions">
+                            <button class="action-icon-btn" onclick="copyAll()" title="Copy All"
+                                data-i18n-title="json_msg_copied"><i class="fas fa-copy"></i></button>
+                            <button class="action-icon-btn" onclick="downloadList()" title="Download .txt"
+                                data-i18n-title="img_btn_download"><i class="fas fa-download"></i></button>
+                            <button class="action-icon-btn" onclick="clearList()" title="Clear"
+                                data-i18n-title="json_clear"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="uuidList" class="uuid-list">
+                        <!-- Items will be injected here -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SEO Footer -->
+            <div class="seo-footer"
+                style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); color: var(--text-secondary);">
+                <h2 style="color: var(--text-primary); margin-bottom: 1rem;">Why use UUID Studio?</h2>
+                <p style="margin-bottom: 1rem;">
+                    <strong>Universally Unique Identifiers (UUIDs)</strong> are essential for modern application
+                    development.
+                    They ensure that every record in your database has a unique ID, even across distributed systems.
+                    <strong>UUID Studio</strong> provides a fast, client-side way to generate these IDs without relying
+                    on external APIs.
+                </p>
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div>
+                        <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">UUID v4</h3>
+                        <p style="font-size: 0.9rem;">The standard random UUID format (e.g.,
+                            <code>f47ac10b-58cc-4372-a567-0e02b2c3d479</code>). Perfect for primary keys in databases
+                            like PostgreSQL and MongoDB.</p>
+                    </div>
+                    <div>
+                        <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">NanoID</h3>
+                        <p style="font-size: 0.9rem;">A tiny, secure, URL-friendly unique string ID generator for
+                            JavaScript. It is efficient and uses a larger alphabet than UUID.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="js/audio-manager.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/uuid-generator.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Exif Viewer | Online Offline Tool | DGToolbox</title>
+    <meta name="description" content="Use our free, offline Exif Viewer directly in your browser. 100% secure, zero tracing, client-side processing.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SPECTRE - Advanced EXIF Viewer & Remover">
+    <meta property="og:description"
+        content="Analyze and remove hidden metadata from your photos. Detect GPS, device info, and more.">
+    <meta property="og:url" content="https://dgtoolbox.com/exif-viewer.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/exif-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="EXIF Viewer & Forensics Tool">
+    <meta name="twitter:description" content="View and clean digital photo metadata instantly.">
+
+    <link rel="canonical" href="https://dgtoolbox.com/exif-viewer.html">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox EXIF Viewer",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web",
+        "description": "A digital forensics tool to view and remove EXIF metadata from images.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "View EXIF, Remove Metadata, GPS Mapping, Hex View, JSON Export",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <link rel="stylesheet" href="css/exif-viewer-specific.css">
+</head>
+
+<body>
+
+    <!-- CONTROL DECK -->
+    <aside class="deck">
+        <div class="brand">SPECTRE <span>//</span></div>
+        <div class="subtitle">FORENSIC LENS</div>
+
+        <div class="drop-target" id="drop-zone" onclick="document.getElementById('file-in').click()">
+            <i class="fas fa-plus" style="font-size:1.5rem; margin-bottom:15px;"></i>
+            <span style="font-family: var(--font-code); font-size:0.8rem;">LOAD SOURCE</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-label">SIZE</div>
+                <div class="stat-val" id="val-size">--</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">TYPE</div>
+                <div class="stat-val" id="val-type">--</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">RESOLUTION</div>
+                <div class="stat-val" id="val-res">--</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">GPS</div>
+                <div class="stat-val" id="val-gps" style="color:#444;">NO SIGNAL</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn" onclick="eng.cleanAndDownload()">
+                <span>SANITIZE FILE</span>
+                <i class="fas fa-shield-alt"></i>
+            </button>
+            <button class="btn btn-sec" onclick="eng.downloadJSON()">
+                <span>EXPORT JSON</span>
+                <i class="fas fa-code"></i>
+            </button>
+            <button class="btn btn-sec" onclick="eng.reset()">
+                <span>RESET SYSTEM</span>
+                <i class="fas fa-undo"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN VIEWPORT -->
+    <main class="viewport">
+        <!-- Navigation -->
+        <div class="view-nav" id="view-nav" style="display:none;">
+            <div class="nav-link active" onclick="eng.setLayer('image')">VISUAL</div>
+            <div class="nav-link" onclick="eng.setLayer('data')">METADATA</div>
+            <div class="nav-link" onclick="eng.setLayer('hex')">BINARY</div>
+            <div class="nav-link" onclick="eng.setLayer('json')">JSON TREE</div>
+            <div class="nav-link" onclick="eng.setLayer('map')" id="nav-map" style="display:none;">GEOLOCATION</div>
+            <div class="nav-link" onclick="eng.setLayer('info')">INFO / SEO</div>
+        </div>
+
+        <!-- EXIT SLIDER (Top Right) -->
+        <div class="shutdown-container">
+            <div class="shutdown-track" id="exit-track">
+                <div class="shutdown-text">SLIDE TO EXIT</div>
+                <div class="shutdown-handle" id="exit-handle">
+                    <i class="fas fa-power-off"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-msg" id="hero-msg">
+            <div class="hero-title">READY</div>
+        </div>
+
+        <!-- LAYERS -->
+        <div class="layer active" id="layer-image">
+            <img id="img-preview" class="main-img" style="display:none;">
+        </div>
+
+        <div class="layer" id="layer-data">
+            <table class="data-table" id="data-table"></table>
+        </div>
+
+        <div class="layer" id="layer-hex">
+            <div class="json-box" id="hex-viewer" style="color:var(--highlight);">LOADING BINARY STREAM...</div>
+        </div>
+
+        <div class="layer" id="layer-json">
+            <div class="json-box" id="json-viewer"></div>
+        </div>
+
+        <div class="layer" id="layer-map" style="padding:0;">
+            <iframe id="map-frame" class="map-wrapper" frameborder="0"></iframe>
+        </div>
+
+    </main>
+
+    <input type="file" id="file-in" hidden>
+
+    <script src="js/exif-viewer.js"></script>
+
+    <!-- HELPFUL CONTENT SECTION (SEO) -->
+    <!-- HELPFUL CONTENT SECTION (SEO) -->
+    <div class="layer" id="layer-info">
+        <div class="json-box" style="color: #ccc; font-family: var(--font-main); line-height: 1.6;">
+            <h2 style="color: var(--highlight); margin-bottom: 1rem;">What is EXIF Data?</h2>
+            <p style="margin-bottom: 2rem;">
+                EXIF (Exchangeable Image File Format) data serves as a digital fingerprint for your photos. It contains
+                critical metadata such as <strong>Camera Model</strong>, <strong>ISO Speed</strong>,
+                <strong>Aperture</strong>,
+                and most importantly, <strong>GPS Coordinates</strong> (Latitude/Longitude).
+            </p>
+
+            <h2 style="color: var(--highlight); margin-bottom: 1rem;">Why Remove Metadata?</h2>
+            <p style="margin-bottom: 2rem;">
+                Removing hidden metadata is essential for privacy. Cyber-criminals, stalkers, or OSINT investigators can
+                use embedded GPS tags to locate
+                exactly where a photo was taken (e.g., your home address).
+                <strong>SPECTRE</strong> allows you to sanitize this data instantly before sharing photos on social
+                media or forums.
+            </p>
+
+            <h3 style="color: #fff; margin-bottom: 1rem;">Features of SPECTRE:</h3>
+            <ul style="padding-left: 20px;">
+                <li style="margin-bottom: 0.5rem;"><strong>Hex Dump Analysis:</strong> View the raw binary data of your
+                    image files.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>GPS Mapping:</strong> Instantly plot embedded coordinates on
+                    Google Maps.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>JSON Export:</strong> Download a full structured report of
+                    your file's metadata.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Privacy Sanitization:</strong> Strip all tracking data with
+                    one click (Client-Side).</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

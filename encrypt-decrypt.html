@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Encrypt and decrypt secret messages using military-grade AES-256 encryption. Processing stays completely on your device.">
+    <title>AES-256 Text Encryption & Decryption | DGToolbox</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔐</text></svg>">
+
+    <link rel="canonical" href="https://dgtoolbox.com/encrypt-decrypt.html">
+
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AES-256 Text Encryption & Decryption | DGToolbox">
+    <meta property="og:description" content="Encrypt and decrypt secret messages using military-grade AES-256 encryption. Processing stays completely on your device.">
+    <meta property="og:url" content="https://dgtoolbox.com/encrypt-decrypt.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/encrypt-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Crypto Studio | DGToolbox">
+    <meta name="twitter:description" content="Secure, offline, browser-based text encryption.">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox Crypto Studio",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Web",
+        "description": "A client-side tool for encrypting and decrypting text using the AES-256 algorithm.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "AES-256 Encryption, Client-side Processing, Password Protection",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CryptoJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link rel="stylesheet" href="css/encrypt-decrypt-specific.css">
+</head>
+
+<body>
+    <header class="mini-header">
+        <div class="header-title">
+            <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+            <span class="tool-name">Crypto Studio</span>
+        </div>
+        <div class="header-actions">
+            <div id="toolStatsBar" class="tool-stats-bar" style="margin-right: 1rem;"></div>
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span data-i18n="exit">Exit
+                    Tool</span></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="tool-container">
+
+            <!-- Secret Key Card -->
+            <div class="key-card">
+                <div class="key-icon"><i class="fas fa-key"></i></div>
+                <div class="key-input-wrapper">
+                    <input type="password" id="secretKey" class="key-input" data-i18n-placeholder="enc_ph_key"
+                        placeholder="Enter your secret key..." autocomplete="off">
+                </div>
+                <button class="toggle-key-btn" onclick="toggleKeyVisibility()" title="Toggle Visibility">
+                    <i class="fas fa-eye" id="eyeIcon"></i>
+                </button>
+            </div>
+
+            <!-- Workspace -->
+            <div class="crypto-grid">
+
+                <!-- Input Panel -->
+                <div class="crypto-panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fas fa-file-alt"></i> <span
+                                data-i18n="enc_label_input">Input</span></div>
+                        <div class="panel-actions">
+                            <button class="icon-action" onclick="pasteText()" title="Paste"
+                                data-i18n-title="json_msg_pasted"><i class="fas fa-paste"></i></button>
+                            <button class="icon-action" onclick="clearInput()" title="Clear"
+                                data-i18n-title="json_clear"><i class="fas fa-eraser"></i></button>
+                        </div>
+                    </div>
+                    <textarea id="inputText" class="crypto-textarea" data-i18n-placeholder="enc_label_input"
+                        placeholder="Type message here..."></textarea>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls-column">
+                    <button class="action-circle-btn encrypt" onclick="encryptText()" title="Encrypt"
+                        data-i18n-title="enc_btn_encrypt">
+                        <i class="fas fa-lock"></i>
+                    </button>
+                    <div class="divider-line"></div>
+                    <button class="action-circle-btn decrypt" onclick="decryptText()" title="Decrypt"
+                        data-i18n-title="enc_btn_decrypt">
+                        <i class="fas fa-unlock"></i>
+                    </button>
+                </div>
+
+                <!-- Output Panel -->
+                <div class="crypto-panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fas fa-shield-alt"></i> <span
+                                data-i18n="enc_label_output">Result</span></div>
+                        <div class="panel-actions">
+                            <button class="icon-action" onclick="copyResult()" title="Copy"
+                                data-i18n-title="json_msg_copied"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <textarea id="outputText" class="crypto-textarea" readonly
+                        placeholder="Result will appear here..."></textarea>
+                </div>
+
+            </div>
+
+            <!-- Console Log -->
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            }
+
+            .action-circle-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            }
+
+            .action-circle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 200, 255, 0.3);
+            }
+
+            .action-circle-btn.encrypt {
+            color: var(--accent-color);
+            border-color: rgba(0, 200, 255, 0.3);
+            }
+
+            .action-circle-btn.encrypt:hover {
+            background: var(--accent-color);
+            color: #000;
+            }
+
+            .action-circle-btn.decrypt {
+            color: #ff4757;
+            border-color: rgba(255, 71, 87, 0.3);
+            }
+
+            .action-circle-btn.decrypt:hover {
+            background: #ff4757;
+            color: #fff;
+            }
+
+            .divider-line {
+            width: 2px;
+            height: 40px;
+            background: var(--glass-border);
+            }
+
+            /* Console Log */
+            .console-log {
+            margin-top: 2rem;
+            background: #000;
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            height: 150px;
+            overflow-y: auto;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column-reverse;
+            /* Newest at bottom visually, but we prepend so actually newest at top */
+            }
+
+            .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            gap: 10px;
+            }
+
+            .log-time {
+            color: var(--text-secondary);
+            opacity: 0.7;
+            }
+
+            .log-info {
+            color: #00c8ff;
+            }
+
+            .log-success {
+            color: #00ff88;
+            }
+
+            .log-error {
+            color: #ff4757;
+            }
+
+            @media (max-width: 900px) {
+            .crypto-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr auto 1fr;
+            gap: 1rem;
+            }
+
+            .controls-column {
+            flex-direction: row;
+            padding: 1rem 0;
+            }
+
+            .divider-line {
+            width: 40px;
+            height: 2px;
+            }
+
+            .crypto-panel {
+            height: 300px;
+            }
+            }
+            </style>
+            </head>
+
+            <body>
+                <header class="mini-header">
+                    <div class="header-title">
+                        <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+                        <span class="tool-name">Crypto Studio</span>
+                    </div>
+                    <div class="header-actions">
+                        <div id="toolStatsBar" class="tool-stats-bar" style="margin-right: 1rem;"></div>
+                        <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span
+                                data-i18n="exit">Exit
+                                Tool</span></a>
+                    </div>
+                </header>
+
+                <main>
+                    <div class="tool-container">
+
+                        <!-- Secret Key Card -->
+                        <div class="key-card">
+                            <div class="key-icon"><i class="fas fa-key"></i></div>
+                            <div class="key-input-wrapper">
+                                <input type="password" id="secretKey" class="key-input"
+                                    data-i18n-placeholder="enc_ph_key" placeholder="Enter your secret key..."
+                                    autocomplete="off">
+                            </div>
+                            <button class="toggle-key-btn" onclick="toggleKeyVisibility()" title="Toggle Visibility">
+                                <i class="fas fa-eye" id="eyeIcon"></i>
+                            </button>
+                        </div>
+
+                        <!-- Workspace -->
+                        <div class="crypto-grid">
+
+                            <!-- Input Panel -->
+                            <div class="crypto-panel">
+                                <div class="panel-header">
+                                    <div class="panel-title"><i class="fas fa-file-alt"></i> <span
+                                            data-i18n="enc_label_input">Input</span></div>
+                                    <div class="panel-actions">
+                                        <button class="icon-action" onclick="pasteText()" title="Paste"
+                                            data-i18n-title="json_msg_pasted"><i class="fas fa-paste"></i></button>
+                                        <button class="icon-action" onclick="clearInput()" title="Clear"
+                                            data-i18n-title="json_clear"><i class="fas fa-eraser"></i></button>
+                                    </div>
+                                </div>
+                                <textarea id="inputText" class="crypto-textarea" data-i18n-placeholder="enc_label_input"
+                                    placeholder="Type message here..."></textarea>
+                            </div>
+
+                            <!-- Controls -->
+                            <div class="controls-column">
+                                <button class="action-circle-btn encrypt" onclick="encryptText()" title="Encrypt"
+                                    data-i18n-title="enc_btn_encrypt">
+                                    <i class="fas fa-lock"></i>
+                                </button>
+                                <div class="divider-line"></div>
+                                <button class="action-circle-btn decrypt" onclick="decryptText()" title="Decrypt"
+                                    data-i18n-title="enc_btn_decrypt">
+                                    <i class="fas fa-unlock"></i>
+                                </button>
+                            </div>
+
+                            <!-- Output Panel -->
+                            <div class="crypto-panel">
+                                <div class="panel-header">
+                                    <div class="panel-title"><i class="fas fa-shield-alt"></i> <span
+                                            data-i18n="enc_label_output">Result</span></div>
+                                    <div class="panel-actions">
+                                        <button class="icon-action" onclick="copyResult()" title="Copy"
+                                            data-i18n-title="json_msg_copied"><i class="fas fa-copy"></i></button>
+                                    </div>
+                                </div>
+                                <textarea id="outputText" class="crypto-textarea" readonly
+                                    placeholder="Result will appear here..."></textarea>
+                            </div>
+
+                        </div>
+
+                        <!-- Console Log -->
+                        <div id="miniConsole" class="console-log"></div>
+
+                        <div class="smart-tip" style="margin-top: 1rem;">
+                            <i class="fas fa-info-circle"></i> <span data-i18n="enc_tip">AES-256 Encryption is performed
+                                entirely in
+                                your browser. No data leaves your device.</span>
+                        </div>
+
+                        <!-- SEO Footer -->
+                        <div class="seo-footer"
+                            style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); color: var(--text-secondary);">
+                            <h2 style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: 1rem;">Secure
+                                Online Encryption Tool</h2>
+                            <p style="margin-bottom: 1rem;">
+                                <strong>Crypto Studio</strong> uses the industry-standard <strong>Advanced Encryption
+                                    Standard (AES)</strong>
+                                with a 256-bit key size to secure your text. This is the same encryption standard used
+                                by governments and
+                                security experts worldwide.
+                            </p>
+                            <p>
+                                Because this tool runs <strong>100% client-side</strong> (in your browser), your secret
+                                keys and data
+                                are never sent to a server. This ensures maximum privacy and security for your sensitive
+                                messages,
+                                passwords, or notes.
+                            </p>
+                            <div style="margin-top: 2rem;">
+                                <strong style="color: var(--text-primary);">Popular Use Cases:</strong>
+                                <ul style="margin-top: 0.5rem; padding-left: 1.5rem; opacity: 0.8;">
+                                    <li>Encrypting sensitive emails before sending.</li>
+                                    <li>Storing secure notes in a public place.</li>
+                                    <li>Sharing secret messages via chat apps.</li>
+                                    <li>Generating and testing encryption keys.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+
+                <script src="js/audio-manager.js"></script>
+                <script src="js/notification-manager.js"></script>
+                <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+                <script src="js/encrypt-decrypt.js"></script>
+            </body>
+
+</html>

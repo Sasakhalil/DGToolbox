@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Tools | Online Offline Tool | DGToolbox</title>
+    <meta name="description" content="Use our free, offline Hash Tools directly in your browser. 100% secure, zero tracing, client-side processing.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Hash Generator - MD5, SHA1, SHA256, SHA512">
+    <meta property="og:description" content="Securely generate standard hashes in your browser. No server uploads.">
+    <meta property="og:url" content="https://dgtoolbox.com/hash-tools.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/hash-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Online Hash Generator">
+    <meta name="twitter:description" content="Generate MD5, SHA1, and SHA256 hashes instantly.">
+
+    <link rel="canonical" href="https://dgtoolbox.com/hash-tools.html">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox Hash Generator",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Web",
+        "description": "A developer tool for generating MD5, SHA1, SHA256, and SHA512 hashes from text.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "MD5, SHA1, SHA256, SHA512, Client-Side Security",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔒</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CryptoJS for MD5 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link rel="stylesheet" href="css/hash-tools-specific.css">
+</head>
+
+<body>
+    <header class="mini-header">
+        <div class="header-title">
+            <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+            <span class="tool-name">Hash Generator</span>
+        </div>
+        <div class="header-actions">
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span>Exit Tool</span></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="tool-container">
+
+            <div class="hash-grid">
+
+                <!-- Hash Selector -->
+                <div class="hash-controls">
+                    <button class="algo-btn active" onclick="setAlgo('MD5')">MD5</button>
+                    <button class="algo-btn" onclick="setAlgo('SHA1')">SHA1</button>
+                    <button class="algo-btn" onclick="setAlgo('SHA256')">SHA256</button>
+                    <button class="algo-btn" onclick="setAlgo('SHA512')">SHA512</button>
+                </div>
+
+                <!-- Input Section -->
+                <div class="input-area">
+                    <div class="area-header">
+                        <span><i class="fas fa-keyboard"></i> INPUT</span>
+                        <div class="action-btns">
+                            <button class="small-btn" onclick="clearInput()"><i class="fas fa-eraser"></i>
+                                Clear</button>
+                            <button class="small-btn" onclick="pasteInput()"><i class="fas fa-paste"></i> Paste</button>
+                        </div>
+                    </div>
+                    <textarea id="inputText" class="hash-textarea"
+                        placeholder="Type or paste text here to hash..."></textarea>
+                    <div class="stats-bar" id="inputStats">0 chars | 0 bytes</div>
+                </div>
+
+                <!-- Output Section -->
+                <div class="output-area" id="outputContainer" style="opacity: 0.5; pointer-events: none;">
+                    <div class="calculating" id="loadingIndicator">Hashing...</div>
+                    <div class="area-header">
+                        <span><i class="fas fa-hashtag"></i> <span id="outputLabel">MD5</span> OUTPUT</span>
+                        <div class="action-btns">
+                            <button class="small-btn" onclick="copyOutput()"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                    </div>
+                    <textarea id="outputText" class="hash-textarea" readonly
+                        placeholder="Result will appear here..."></textarea>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- SEO Footer -->
+        <div class="seo-footer"
+            style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05);">
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; color: var(--text-secondary);">
+                <div>
+                    <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;"><i class="fas fa-shield-alt"></i>
+                        Secure Hashing</h3>
+                    <p>
+                        All hashing is performed <strong>locally in your browser</strong> using JavaScript.
+                        Your data is never sent to any server, ensuring 100% privacy and security for your sensitive
+                        strings or passwords.
+                    </p>
+                </div>
+                <div>
+                    <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;"><i class="fas fa-code"></i> Developer
+                        Friendly</h3>
+                    <p>
+                        Supported Algorithms: <strong>MD5</strong> (Legacy), <strong>SHA-1</strong>,
+                        <strong>SHA-256</strong> (Standard), and <strong>SHA-512</strong> (High Security).
+                        Perfect for verifying file integrity, checking checksums, or generating API signatures.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </main>
+
+    <script src="js/audio-manager.js"></script>
+    <script src="js/notification-manager.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/hash-tools.js"></script>
+</body>
+
+</html>

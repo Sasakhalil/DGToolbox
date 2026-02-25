@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | Online Offline Tool | DGToolbox</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Poppins:wght@400;600&family=Cairo:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/settings-specific.css">
+    <link rel="canonical" href="https://dgtoolbox.com/settings.html">
+</head>
+
+<body class="settings-page">
+    <header>
+        <div class="logo"><a href="index.html" class="logo-small"><i class="fas fa-rocket"></i>
+                DGToolbox</a>
+
+        </div>
+        <div class="header-actions">
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+    </header>
+    <main>
+        <div class="tool-container" style="max-width: 800px;">
+            <div class="tool-header">
+                <h1><i class="fas fa-cog"></i><span data-i18n="settings_title">Preferences Engine</span></h1>
+                <p data-i18n="settings_desc">Customize every aspect of your experience.</p>
+            </div>
+            <!-- Level 1: Essentials -->
+            <div class="settings-section">
+                <h2><i class="fas fa-layer-group"></i><span data-i18n="level_1">Level 1: Essentials</span></h2>
+                <div class="input-group" style="display: flex; justify-content: space-between; align-items: center;">
+                    <label data-i18n="lang_label">Language / اللغة</label>
+                    <div class="select-wrapper"><select id="languageSelect" onchange="updateLanguage()"
+                            class="premium-select" style="width: 150px;">
+                            <option value="en">English</option>
+                            <option value="ar">العربية</option>
+                        </select></div>
+                </div>
+                <div class="input-group"><label data-i18n="theme_label"
+                        style="display:block; margin-bottom:15px;">Visual Experience</label>
+                    <div class="theme-grid">
+                        <!-- Standard Themes -->
+                        <div class="theme-card" onclick="selectVisualTheme('dark')" data-theme="dark">
+                            <div class="theme-preview" style="background: #0f0f0f; border:1px solid #333;">
+                            </div><span>Dark</span>
+                        </div>
+                        <div class="theme-card" onclick="selectVisualTheme('light')" data-theme="light">
+                            <div class="theme-preview" style="background: #e0e5ec; border:1px solid #ccc;">
+                            </div><span>Light</span>
+                        </div>
+                        <div class="theme-card" onclick="selectVisualTheme('amoled')" data-theme="amoled">
+                            <div class="theme-preview" style="background: #000; border:1px solid #333;"></div>
+                            <span>AMOLED</span>
+                        </div>
+                        <div class="theme-card" onclick="selectVisualTheme('flat')" data-theme="flat">
+                            <div class="theme-preview" style="background: #f5f7fa; border:1px solid #ddd;">
+                            </div><span>Flat</span>
+                        </div>
+                        <!-- New Premium Themes -->
+                        <div class="theme-card" onclick="selectVisualTheme('neon')" data-theme="neon">
+                            <div class="theme-preview"
+                                style="background: #050505; border:1px solid #00ff9d; box-shadow:0 0 5px #00ff9d;">
+                            </div><span>Neon</span>
+                        </div>
+                        <div class="theme-card" onclick="selectVisualTheme('cyber')" data-theme="cyber">
+                            <div class="theme-preview"
+                                style="background: #0a0b1e; border:1px solid #00f3ff; box-shadow: inset 0 0 5px #00f3ff;">
+                            </div><span>Cyber</span>
+                        </div>
+                        <div class="theme-card" onclick="selectVisualTheme('retro')" data-theme="retro">
+                            <div class="theme-preview"
+                                style="background: #000; border:1px solid #33ff00; font-family:monospace;">
+                                <span style="color:#33ff00; font-size:10px;">>_</span>
+                            </div>
+                            <span>Retro</span>
+                        </div>
+                        <div class="theme-card" onclick="selectVisualTheme('pastel')" data-theme="pastel">
+                            <div class="theme-preview" style="background: #fffaf0; border:1px solid #ff9aa2;"></div>
+                            <span>Pastel</span>
+                        </div>
+                    </div>
+                    <!-- Hidden Select for Logic Compatibility --><select id="themeSelect" style="display:none;">
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                        <option value="amoled">AMOLED</option>
+                        <option value="flat">Flat</option>
+                        <option value="neon">Neon</option>
+                        <option value="cyber">Cyber</option>
+                        <option value="retro">Retro</option>
+                        <option value="pastel">Pastel</option>
+                    </select>
+                </div>
+                <div class="input-group"><label data-i18n="accent_label">Accent Color</label>
+                    <div class="color-options" id="accentOptions">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+            </div>
+            <!-- Level 2: Typography -->
+            <div class="settings-section">
+                <h2><i class="fas fa-font"></i><span data-i18n="level_2">Level 2: Typography</span></h2>
+                <div class="input-group"><label data-i18n="font_family_label">Font Family</label>
+                    <div class="select-wrapper"><select id="fontFamilySelect" onchange="updateFontFamily()"
+                            class="premium-select">
+                            <option value="'Inter', sans-serif" data-i18n="font_inter">Inter (Modern)</option>
+                            <option value="'JetBrains Mono', monospace" data-i18n="font_jetbrains">JetBrains
+                                Mono (Code)</option>
+                            <option value="'Poppins', sans-serif" data-i18n="font_poppins">Poppins (Geometric)
+                            </option>
+                            <option value="'Cairo', sans-serif" data-i18n="font_cairo">Cairo (Arabic Optimized)
+                            </option>
+                        </select></div>
+                </div>
+                <div class="input-group"><label data-i18n="font_size_label">Font Size</label><input type="range"
+                        id="fontSizeRange" min="12" max="24" value="16" oninput="updateFontSize()"><span
+                        id="fontSizeValue" style="float: right; color: var(--accent-color);">16px</span></div>
+            </div>
+            <!-- Level 3: Density & Layout -->
+            <div class="settings-section">
+                <h2><i class="fas fa-compress-arrows-alt"></i><span data-i18n="level_3">Level 3: Density &
+                        Layout</span></h2>
+                <div class="input-group"><label data-i18n="density_label">UI Density</label>
+                    <div class="select-wrapper"><select id="densitySelect" onchange="updateDensity()"
+                            class="premium-select">
+                            <option value="compact" data-i18n="density_compact">Compact (High Density)
+                            </option>
+                            <option value="comfortable" data-i18n="density_comfortable">Comfortable
+                                (Default) </option>
+                            <option value="spacious" data-i18n="density_spacious">Spacious (Relaxed)
+                            </option>
+                        </select></div>
+                </div>
+                <div class="input-group"><label data-i18n="layout_label">Tools Layout</label>
+                    <div class="select-wrapper"><select id="layoutSelect" onchange="updateLayout()"
+                            class="premium-select">
+                            <option value="grid" data-i18n="layout_grid">Grid 3x3</option>
+                            <option value="large" data-i18n="layout_large">Large Cards</option>
+                            <option value="list" data-i18n="layout_list">Minimal List</option>
+                        </select></div>
+                </div>
+            </div>
+            <!-- Level 4: Interaction & Performance -->
+            <div class="settings-section">
+                <h2><i class="fas fa-tachometer-alt"></i><span data-i18n="level_4">Level 4: Interaction
+                        & Performance</span></h2>
+                <div class="input-group"><label data-i18n="anim_label">Interaction Profile
+                        (Animations)</label>
+                    <div class="select-wrapper"><select id="animProfileSelect" onchange="updateAnimProfile()"
+                            class="premium-select">
+                            <option value="fast" data-i18n="anim_fast">Fast (Snappy)</option>
+                            <option value="normal" data-i18n="anim_normal">Normal (Balanced)</option>
+                            <option value="slow" data-i18n="anim_slow">Slow (Cinematic)</option>
+                            <option value="none" data-i18n="anim_none">Instant (No Animation)</option>
+                        </select></div>
+                </div>
+                <div class="input-group"><label data-i18n="energy_label">Energy Mode</label>
+                    <div class="select-wrapper"><select id="energyModeSelect" onchange="updateEnergyMode()"
+                            class="premium-select">
+                            <option value="aesthetic" data-i18n="energy_aesthetic">Aesthetic (Max FX)
+                            </option>
+                            <option value="balanced" data-i18n="energy_balanced">Balanced</option>
+                            <option value="performance" data-i18n="energy_performance">Performance (Low
+                                FX) </option>
+                            <option value="battery" data-i18n="energy_battery">Battery Saver (Low FPS)
+                            </option>
+                        </select></div>
+                </div>
+                <!-- Audio Studio -->
+                <div class="audio-studio"
+                    style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.1rem; color: var(--accent-color);">
+                        <i class="fas fa-volume-up"></i><span data-i18n="audio_studio_title">Audio
+                            Studio</span>
+                    </h3>
+                    <!-- Master Mute -->
+                    <div class="input-group"
+                        style="display: flex; justify-content: space-between; align-items: center;">
+                        <label data-i18n="audio_master">Master Audio</label><label class="toggle-switch"><input
+                                type="checkbox" id="masterMuteToggle" onchange="toggleMasterMute()"><span
+                                class="slider"></span></label>
+                    </div>
+                    <!-- Theme Selector -->
+                    <div class="input-group"><label data-i18n="audio_theme_label">Sound
+                            Theme</label>
+                        <div style="display: flex; gap: 10px;">
+                            <div class="select-wrapper" style="flex: 1;"><select id="soundThemeSelect"
+                                    onchange="updateSoundTheme()" class="premium-select">
+                                    <option value="default" data-i18n="sound_default">
+                                        Default (Balanced)</option>
+                                    <option value="minimal" data-i18n="sound_minimal">
+                                        Minimal (Clean)</option>
+                                    <option value="tech" data-i18n="sound_tech">Tech Hacker
+                                        (Glitch)</option>
+                                    <option value="mechanical" data-i18n="sound_mechanical">
+                                        Mechanical (Clicky)</option>
+                                    <option value="bubble" data-i18n="sound_bubble">Bubble
+                                        (Fun)</option>
+                                    <option value="retro" data-i18n="sound_retro">Retro
+                                        (8-Bit)</option>
+                                    <option value="glass" data-i18n="sound_glass">Glass
+                                        (Elegant)</option>
+                                    <option value="magic" data-i18n="sound_magic">Magic
+                                        (Sparkle)</option>
+                                    <option value="wood" data-i18n="sound_wood">Wood
+                                        (Organic)</option>
+                                    <option value="zap" data-i18n="sound_zap">Zap (Sci-Fi)
+                                    </option>
+                                    <option value="piano" data-i18n="sound_piano">Piano
+                                        (Musical)</option>
+                                    <option value="space" data-i18n="sound_space">Space
+                                        (Deep)</option>
+                                    <option value="water" data-i18n="sound_water">Water
+                                        (Liquid)</option>
+                                    <option value="neon" data-i18n="sound_neon">Neon (Buzz)
+                                    </option>
+                                    <option value="typewriter" data-i18n="sound_typewriter">
+                                        Typewriter (Clack)</option>
+                                    <option value="samurai" data-i18n="sound_samurai">
+                                        Samurai (Sharp)</option>
+                                    <option value="synth" data-i18n="sound_synth">80s Synth
+                                        (Retrowave)</option>
+                                    <option value="orchestra" data-i18n="sound_orchestra">
+                                        Orchestra (Dramatic)</option>
+                                    <option value="cartoon" data-i18n="sound_cartoon">
+                                        Cartoon (Funny)</option>
+                                    <option value="cyberpunk" data-i18n="sound_cyberpunk">
+                                        Cyberpunk (Heavy)</option>
+                                    <option value="pop" data-i18n="sound_pop">Pop (Happy)
+                                    </option>
+                                    <option value="horror" data-i18n="sound_horror">Horror
+                                        (Creepy)</option>
+                                </select></div><button class="action-btn" onclick="previewSound()"
+                                style="margin: 0; padding: 0 15px; width: auto;"><i class="fas fa-play"></i></button>
+                        </div>
+                    </div>
+                    <!-- Ambient & Voice Controls -->
+                    <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+                        <div class="input-group">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <label style="margin: 0;" data-i18n="audio_ambient_label">Ambient
+                                    Layer</label><label class="toggle-switch" style="transform: scale(0.8);"><input
+                                        type="checkbox" id="ambientToggle" onchange="toggleAmbient()"><span
+                                        class="slider"></span></label>
+                            </div>
+                        </div>
+                        <div class="input-group"><label data-i18n="audio_click_vol">Click Volume</label><input
+                                type="range" id="sfxVolumeSlider" min="0" max="1" step="0.1"
+                                oninput="updateVolume('sfx')"></div>
+                        <div class="input-group"><label data-i18n="audio_voice_vol">Voice Volume</label><input
+                                type="range" id="voiceVolumeSlider" min="0" max="1" step="0.1"
+                                oninput="updateVolume('voice')"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Level 5 Removed as per request -->
+            <!-- Data Management -->
+            <div class="settings-section">
+                <h2><i class="fas fa-database"></i><span data-i18n="data_mgmt">Data
+                        Management</span></h2>
+                <div class="input-group"><label data-i18n="export_import_label">Export/Import
+                        Settings</label>
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1rem;"><button class="action-btn"
+                            onclick="exportSettings()" style="margin-top: 0;"><i class="fas fa-file-export"></i><span
+                                data-i18n="btn_export">Export</span></button><input type="file" id="importFile"
+                            accept=".json" style="display: none;" onchange="importSettings(this.files[0])"><button
+                            class="action-btn" onclick="document.getElementById('importFile').click()"
+                            style="background: var(--surface-color); color: var(--text-primary); margin-top: 0;"><i
+                                class="fas fa-file-import"></i><span data-i18n="btn_import">Import</span></button></div>
+                </div><button class="action-btn" onclick="clearAllData()"
+                    style="background: var(--danger-color); color: #fff;"><i class="fas fa-trash"></i><span
+                        data-i18n="btn_clear">Clear All Local
+                        Data</span></button>
+            </div>
+        </div>
+    </main>
+    <script src="js/audio-manager.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/settings.js"></script>
+</body>
+
+</html>

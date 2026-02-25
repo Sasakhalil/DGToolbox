@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pick, convert, and discover beautiful colors with our advanced offline HEX/RGB/HSL color picker.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Advanced Color Picker & HEX, RGB Converter | DGToolbox">
+    <meta property="og:description" content="Pick, convert, and discover beautiful colors with our advanced offline HEX/RGB/HSL color picker.">
+    <meta property="og:url" content="https://dgtoolbox.com/color-picker.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/color-picker-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Color Studio Pro">
+    <meta name="twitter:description" content="The ultimate color tool for developers and designers.">
+
+    <title>Advanced Color Picker & HEX, RGB Converter | DGToolbox</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Color Studio Pro",
+        "applicationCategory": "DesignApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "description": "Professional color manipulation suite for developers. Features gradient generation, format conversion, and palette management.",
+        "featureList": "HEX/RGB/HSL Conversion, CSS Gradient Generator, Palette History, Offline Capable",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+
+    <link rel="stylesheet" href="css/color-picker-specific.css">
+    <link rel="canonical" href="https://dgtoolbox.com/color-picker.html">
+</head>
+
+<body>
+    <header class="mini-header">
+        <div class="header-title">
+            <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+            <span class="tool-name">Color Studio</span>
+        </div>
+        <div class="header-actions">
+            <div id="toolStatsBar" class="tool-stats-bar" style="margin-right: 1rem;"></div>
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span data-i18n="exit">Exit
+                    Tool</span></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="tool-container">
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('picker')" data-i18n="tool_tab_picker">Color
+                    Picker</button>
+                <button class="tab-btn" onclick="switchTab('gradient')" data-i18n="tool_tab_gradient">Gradient
+                    Maker</button>
+            </div>
+
+            <div class="color-grid">
+                <!-- Main Area -->
+                <div class="main-column">
+
+                    <!-- Picker View -->
+                    <div id="pickerTab" class="studio-card">
+                        <div class="preview-container">
+                            <div id="mainPreview"></div>
+                        </div>
+
+                        <div class="controls-row">
+                            <div class="color-input-wrapper" title="Click to pick color"
+                                data-i18n-title="color_tip_pick">
+                                <input type="color" id="colorInput" value="#00c8ff">
+                            </div>
+
+                            <div class="values-grid">
+                                <div class="value-box">
+                                    <span style="color: var(--text-secondary); font-size: 0.8rem; margin-right: 8px;"
+                                        data-i18n="tool_hex">HEX</span>
+                                    <input type="text" id="hexInput" value="#00C8FF">
+                                    <button class="copy-btn" onclick="copyToClipboard('hexInput')" title="Copy"
+                                        data-i18n-title="json_msg_copied"><i class="fas fa-copy"></i></button>
+                                </div>
+                                <div class="value-box">
+                                    <span style="color: var(--text-secondary); font-size: 0.8rem; margin-right: 8px;"
+                                        data-i18n="tool_rgb">RGB</span>
+                                    <input type="text" id="rgbInput" value="rgb(0, 200, 255)">
+                                    <button class="copy-btn" onclick="copyToClipboard('rgbInput')" title="Copy"
+                                        data-i18n-title="json_msg_copied"><i class="fas fa-copy"></i></button>
+                                </div>
+                                <div class="value-box">
+                                    <span style="color: var(--text-secondary); font-size: 0.8rem; margin-right: 8px;"
+                                        data-i18n="tool_hsl">HSL</span>
+                                    <input type="text" id="hslInput" value="hsl(193, 100%, 50%)">
+                                    <button class="copy-btn" onclick="copyToClipboard('hslInput')" title="Copy"
+                                        data-i18n-title="json_msg_copied"><i class="fas fa-copy"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gradient View (Hidden by default) -->
+                    <div id="gradientTab" class="studio-card" style="display: none;">
+                        <div id="gradientPreview" class="gradient-preview"
+                            style="background: linear-gradient(90deg, #00c8ff, #ff00c8);"></div>
+
+                        <div class="controls-row">
+                            <div style="display: flex; gap: 1rem; align-items: center;">
+                                <div class="color-input-wrapper" style="width: 40px; height: 40px;" title="Color 1"
+                                    data-i18n-title="color_tip_pick">
+                                    <input type="color" id="gradColor1" value="#00c8ff">
+                                </div>
+                                <i class="fas fa-arrow-right" style="color: var(--text-secondary);"></i>
+                                <div class="color-input-wrapper" style="width: 40px; height: 40px;" title="Color 2"
+                                    data-i18n-title="color_tip_pick">
+                                    <input type="color" id="gradColor2" value="#ff00c8">
+                                </div>
+                            </div>
+
+                            <div class="value-box" style="flex: 1;">
+                                <input type="text" id="cssOutput" value="linear-gradient(90deg, #00c8ff, #ff00c8)"
+                                    readonly>
+                                <button class="copy-btn" onclick="copyToClipboard('cssOutput')" title="Copy"
+                                    data-i18n-title="json_msg_copied"><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Sidebar -->
+                <div class="sidebar-section">
+
+                    <!-- Shades & Tints -->
+                    <div class="sidebar-card">
+                        <div class="sidebar-title"><i class="fas fa-layer-group"></i> <span
+                                data-i18n="tool_shades">Shades & Tints</span></div>
+                        <div id="shadesContainer" class="shades-container">
+                            <!-- Generated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- History -->
+                    <div class="sidebar-card">
+                        <div class="sidebar-title">
+                            <i class="fas fa-history"></i> <span data-i18n="tool_recent_colors">Recent Colors</span>
+                            <button class="mini-btn" onclick="clearHistory()" title="Clear History"
+                                data-i18n-title="color_btn_clear"
+                                style="margin-left: auto; background: transparent; border: none; color: var(--text-secondary); cursor: pointer;"><i
+                                    class="fas fa-trash"></i></button>
+                        </div>
+                        <div id="historyGrid" class="palette-grid">
+                            <!-- Generated by JS -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SEO Content Section -->
+        <article class="seo-content"
+            style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2rem; margin-top: 2rem; backdrop-filter: blur(12px); color: var(--text-secondary); line-height: 1.6;">
+            <h1 style="color: var(--text-primary); font-size: 1.8rem; margin-bottom: 1.5rem;">Advanced Color Picker &
+                Gradient Generator</h1>
+            <p style="margin-bottom: 2rem;">
+                <strong>Color Studio</strong> is the ultimate toolkit for designers and developers.
+                Whether you need to <span style="color:var(--accent-color)">convert HEX to RGB</span>, create stunning
+                <span style="color:var(--accent-color)">CSS gradients</span>, or build a cohesive color palette,
+                our tool delivers professional results instantly.
+            </p>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <div>
+                    <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 1rem;">Why Use This Color
+                        Picker?</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>100% Offline:</strong> No server calls. Your data is private.</li>
+                        <li><strong>Real-time Preview:</strong> See changes instantly as you adjust sliders.</li>
+                        <li><strong>Smart History:</strong> Automatically saves your recent colors.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 1rem;">Supported Formats
+                    </h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>HEX:</strong> Standard web hex codes (e.g., #FF0000).</li>
+                        <li><strong>RGB:</strong> Red, Green, Blue integers.</li>
+                        <li><strong>HSL:</strong> Hue, Saturation, Lightness for intuitive adjustments.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <section class="seo-tags" style="border-top: 1px solid var(--glass-border); padding-top: 2rem;">
+                <h3 style="font-size: 1rem; color: var(--text-primary); margin-bottom: 1rem;">Popular Searches</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span
+                        style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">HEX
+                        to RGB</span>
+                    <span
+                        style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">RGB
+                        to HEX</span>
+                    <span
+                        style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">Color
+                        Palette Generator</span>
+                    <span
+                        style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">CSS
+                        Gradient</span>
+                    <span
+                        style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">Web
+                        Color Picker</span>
+                    <span
+                        style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">Flat
+                        UI Colors</span>
+                    <span
+                        style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">Material
+                        Design Colors</span>
+                    <span
+                        style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">Color
+                        Converter Online</span>
+                </div>
+            </section>
+        </article>
+
+        <script src="js/audio-manager.js"></script>
+        <script src="js/notification-manager.js"></script>
+        <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+        <script src="js/color-picker.js"></script>
+</body>
+
+</html>

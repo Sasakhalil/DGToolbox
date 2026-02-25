@@ -1,0 +1,263 @@
+:root {
+            --amber: #ffae00f7;
+            --dark: #0a0a0a;
+            --grid: rgba(255, 174, 0, 0.15);
+            --text: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            font-family: 'Share Tech Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- TACTICAL GRID BACKGROUND --- */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image:
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* --- HEADER --- */
+        header {
+            padding: 2rem 4rem;
+            border-bottom: 2px solid var(--amber);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .brand {
+            font-family: 'Teko', sans-serif;
+            font-size: 2.5rem;
+            color: var(--amber);
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .brand span {
+            color: #fff;
+        }
+
+        .back-btn {
+            color: var(--amber);
+            text-decoration: none;
+            font-size: 1.2rem;
+            border: 1px solid var(--amber);
+            padding: 8px 16px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .back-btn:hover {
+            background: var(--amber);
+            color: #000;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+        }
+
+        .intro-text {
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 800px;
+        }
+
+        .intro-text h2 {
+            font-size: 1.5rem;
+            color: var(--amber);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .intro-text p {
+            font-size: 1.1rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* --- PROTOCOL CARDS --- */
+        .protocols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .protocol-card {
+            border: 1px solid #333;
+            background: rgba(20, 20, 20, 0.8);
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s;
+            cursor: default;
+            /* Information focus */
+        }
+
+        .protocol-card:hover {
+            border-color: var(--amber);
+            transform: translateY(-5px);
+            background: rgba(255, 174, 0, 0.05);
+        }
+
+        .protocol-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--amber);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+            transform-origin: left;
+        }
+
+        .protocol-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .holo-number {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 4rem;
+            font-family: 'Teko', sans-serif;
+            color: rgba(255, 255, 255, 0.05);
+            font-weight: 700;
+        }
+
+        .p-icon {
+            font-size: 2.5rem;
+            color: var(--amber);
+            margin-bottom: 1.5rem;
+        }
+
+        .p-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .p-desc {
+            font-size: 0.95rem;
+            color: #aaa;
+            line-height: 1.5;
+        }
+
+        /* --- ACTION BAR (THE FREQUENCY) --- */
+        .comm-link-container {
+            margin-top: 5rem;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .comm-label {
+            display: block;
+            margin-bottom: 1rem;
+            color: var(--amber);
+            letter-spacing: 3px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .hero-email {
+            display: inline-block;
+            font-family: 'Teko', sans-serif;
+            font-size: 4rem;
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: 0.3s;
+            line-height: 1;
+            padding-bottom: 5px;
+        }
+
+        .hero-email:hover {
+            color: var(--amber);
+            border-bottom-color: var(--amber);
+            text-shadow: 0 0 20px rgba(255, 174, 0, 0.4);
+        }
+
+        .socials {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .soc-link {
+            color: #555;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 1rem;
+            border: 1px solid #333;
+            padding: 5px 15px;
+            transition: 0.3s;
+        }
+
+        .soc-link:hover {
+            color: #fff;
+            border-color: #fff;
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 900px) {
+            .protocols {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-email {
+                font-size: 2rem;
+                word-break: break-all;
+            }
+
+            header {
+                padding: 1.5rem;
+            }
+        }

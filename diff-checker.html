@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text & Code Diff Checker | Compare Files Offline | DGToolbox</title>
+    <meta name="description" content="Compare text and code instantly to spot differences. Secure, offline diff checker for developers.">
+    
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Text & Code Diff Checker | Compare Files Offline | DGToolbox">
+    <meta property="og:description" content="Compare text and code instantly to spot differences. Secure, offline diff checker for developers.">
+    <meta property="og:url" content="https://dgtoolbox.com/diff-checker.html">
+    <meta property="og:image" content="https://dgtoolbox.com/screenshots/diff-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Online Diff Checker Tool">
+    <meta name="twitter:description" content="Highlight differences between two text blocks or code files.">
+
+    <link rel="canonical" href="https://dgtoolbox.com/diff-checker.html">
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox Diff Checker",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "description": "A developer tool for comparing text and code to find differences (diff analysis).",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "Side-by-side comparison, Syntax Highlighting, Character-level diff, Merge view",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛠️</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- JSDiff Library (Essential) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsdiff/5.1.0/diff.min.js"></script>
+
+    <link rel="stylesheet" href="css/diff-checker-specific.css">
+</head>
+
+<body>
+    <header class="mini-header">
+        <div class="header-title">
+            <a href="index.html" class="logo-small"><i class="fas fa-cube"></i> DGToolbox</a>
+            <span class="tool-name">Smart Diff</span>
+            <div id="toolLoader" class="loader"></div>
+        </div>
+        <div class="header-actions">
+            <div id="toolStatsBar" class="tool-stats-bar" style="margin-right: 1rem;"></div>
+            <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> <span
+                    data-i18n="exit">Exit</span></a>
+        </div>
+    </header>
+
+    <main style="padding: 2rem;">
+        <div class="tool-grid">
+
+            <!-- Sidebar: Education & Value -->
+            <aside class="info-panel">
+                <div class="info-title"><i class="fas fa-info-circle"></i> <span data-i18n="diff_why">Why use
+                        this?</span></div>
+                <ul class="feature-list">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong data-i18n="diff_desc_spot">Spot Changes</strong></span>
+                    </li>
+                    <li>
+                        <i class="fas fa-bug"></i>
+                        <span><strong data-i18n="diff_desc_debug">Debug Code</strong></span>
+                    </li>
+                    <li>
+                        <i class="fas fa-file-contract"></i>
+                        <span><strong data-i18n="diff_desc_drafts">Compare Drafts</strong></span>
+                    </li>
+                </ul>
+
+                <div style="margin-top: 2rem; text-align: center;">
+                    <button class="demo-btn" onclick="loadDemo()">
+                        <i class="fas fa-magic"></i> <span data-i18n="diff_demo_btn">Try Live Demo</span>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Workspace -->
+            <div class="workspace">
+
+                <!-- Stats Dashboard -->
+                <div class="stats-bar" id="statsBar" style="display: none;">
+                    <div class="stat-item">
+                        <div class="stat-value" style="color: #56d364;" id="statAdded">0</div>
+                        <div class="stat-label" data-i18n="diff_stat_add">Lines Added</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" style="color: #f85149;" id="statRemoved">0</div>
+                        <div class="stat-label" data-i18n="diff_stat_rem">Lines Removed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" style="color: var(--accent-color);" id="statChanges">0</div>
+                        <div class="stat-label" data-i18n="diff_stat_change">Total Changes</div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="editor-container" id="inputContainer">
+                    <div class="editor-box">
+                        <div class="box-header">
+                            <span class="box-title" data-i18n="diff_orig">Original Version</span>
+                            <button class="tool-btn" onclick="pasteTo('textOld')" title="Paste"
+                                data-i18n-title="json_msg_pasted"><i class="fas fa-paste"></i></button>
+                        </div>
+                        <textarea id="textOld" class="code-input" placeholder="Paste original text here..."
+                            data-i18n-placeholder="diff_orig"></textarea>
+                    </div>
+                    <div class="editor-box">
+                        <div class="box-header">
+                            <span class="box-title" data-i18n="diff_mod">New Version</span>
+                            <button class="tool-btn" onclick="pasteTo('textNew')" title="Paste"
+                                data-i18n-title="json_msg_pasted"><i class="fas fa-paste"></i></button>
+                        </div>
+                        <textarea id="textNew" class="code-input" placeholder="Paste new text here..."
+                            data-i18n-placeholder="diff_mod"></textarea>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-bar">
+                    <button class="action-btn" onclick="compareText()">
+                        <i class="fas fa-exchange-alt"></i> <span data-i18n="diff_btn_compare">Compare Now</span>
+                    </button>
+                    <button class="action-btn secondary" onclick="resetTool()">
+                        <i class="fas fa-undo"></i> <span data-i18n="json_clear">Reset</span>
+                    </button>
+                </div>
+
+                <!-- Results Area -->
+                <div id="diffViewer" class="diff-viewer">
+                    <!-- Diff rows will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SEO Footer -->
+        <div class="seo-footer"
+            style="max-width: 1400px; margin: 4rem auto 0; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary);">
+            <h2 style="color: var(--text-primary); margin-bottom: 1rem;">Why use a Diff Checker?</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div>
+                    <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">For Developers</h3>
+                    <p style="margin-bottom: 1rem;">
+                        Quickly spot changes between two versions of code before committing.
+                        Debugging configurations or checking JSON output differences becomes trivial with a visual diff
+                        tool.
+                    </p>
+                </div>
+                <div>
+                    <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">For Writers</h3>
+                    <p>
+                        Compare drafts of articles or documents to see exactly what was edited.
+                        The character-level highlighting ensures you never miss a typo fix or a deleted sentence.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/audio-manager.js"></script>
+    <script src="js/notification-manager.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/diff-checker.js"></script>
+</body>
+
+</html>

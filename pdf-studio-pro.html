@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pdf Studio Pro | Online Offline Tool | DGToolbox</title>
+<meta name="description" content="Use our free, offline Pdf Studio Pro directly in your browser. 100% secure, zero tracing, client-side processing.">
+
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="PDF Studio Pro - Secure Online PDF Tools">
+<meta property="og:description"
+    content="Merge, Split, Encrypt, and Watermark PDFs instantly in your browser. 100% Private & Free.">
+<meta property="og:url" content="https://dgtoolbox.com/pdf-studio-pro.html">
+<meta property="og:image" content="https://dgtoolbox.com/screenshots/pdf-studio-preview.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PDF Studio Pro">
+<meta name="twitter:description" content="The most secure way to edit PDFs online. No server uploads.">
+
+<link rel="canonical" href="https://dgtoolbox.com/pdf-studio-pro.html">
+
+<!-- Schema -->
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DGToolbox PDF Studio",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Any",
+        "description": "Secure, client-side PDF manipulation tools including Merger, Splitter, Encryption, and Watermarking.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": "Merge PDF, Split PDF, Encrypt/Decrypt PDF, Watermark PDF",
+        "author": {
+            "@type": "Person",
+            "name": "Mostafa Khalil"
+        }
+    }
+    </script>
+
+
+<!-- Fonts -->
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- PDF Libs (Logic) -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/downloadjs@1.4.7/download.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+<link rel="stylesheet" href="css/pdf-studio-pro-specific.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="brand">
+                <i class="fas fa-file-pdf"></i> PDF STUDIO
+            </div>
+
+            <div class="nav-header">Tools</div>
+            <div class="nav-item active" onclick="nav('merge')"><i class="fas fa-layer-group"></i> Merger</div>
+            <div class="nav-item" onclick="nav('split')"><i class="fas fa-cut"></i> Splitter</div>
+
+            <div class="nav-header">Security</div>
+            <div class="nav-item" onclick="nav('secure')"><i class="fas fa-shield-alt"></i> Encrypt / Decrypt</div>
+            <div class="nav-item" onclick="nav('watermark')"><i class="fas fa-stamp"></i> Watermark</div>
+
+            <div
+                style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px; font-size: 0.8rem; color: var(--text-muted); opacity: 0.7;">
+                <p>Private & Secure<br>Processing happens in-browser.</p>
+            </div>
+
+            <a href="index.html" class="sys-exit"><i class="fas fa-arrow-left"></i> Exit to Toolbox</a>
+        </div>
+
+        <!-- MAIN AREA -->
+        <div class="main-stage">
+
+            <div class="top-bar">
+                <div class="page-title" id="page-header">Merger <span>Combine multiple files into one</span></div>
+                <div id="action-area"></div>
+            </div>
+
+            <div class="content-area">
+
+                <!-- 1. MERGE VIEW -->
+                <div id="view-merge" class="view-panel active">
+                    <div style="flex:1; display:flex; flex-direction:column; gap:20px;">
+
+                        <!-- Toolbar moved inside content for better context or kept in floating header? Let's use Grid actions -->
+                        <div style="display:flex; justify-content:flex-end; gap:10px; margin-bottom:10px;">
+                            <button class="btn btn-primary" onclick="document.getElementById('in-merge').click()"><i
+                                    class="fas fa-plus"></i> Add Files</button>
+                            <button class="btn btn-primary" onclick="app.doMerge()"><i class="fas fa-download"></i>
+                                Merge & Download</button>
+                            <button class="btn btn-danger"
+                                onclick="document.getElementById('grid-merge').innerHTML=''; app.mergePages=[];"><i
+                                    class="fas fa-trash"></i> Clear</button>
+                        </div>
+
+                        <!-- Drop & Grid -->
+                        <div id="drop-merge" class="drop-zone" onclick="document.getElementById('in-merge').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span class="drop-desc">Drag & Drop PDF files here</span>
+                            <span class="drop-sub">or click to browse</span>
+                        </div>
+                        <div id="grid-merge" class="file-grid"></div>
+
+                    </div>
+                    <input type="file" id="in-merge" multiple hidden accept=".pdf">
+
+                    <!-- MERGE CONTEXT INFO -->
+                    <div class="info-panel"
+                        style="margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+                        <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem;">How to Merge PDFs
+                        </h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                            Combine multiple PDF documents into a single file with our <strong>Secure PDF
+                                Merger</strong>.
+                            Simply drag and drop your files above, reorder them if needed, and click "Merge".
+                            Unlike other tools, this process happens 100% in your browser using WebAssembly technology,
+                            ensuring your private documents never leave your computer.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2. SPLIT VIEW -->
+                <div id="view-split" class="view-panel">
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-bottom:20px;">
+                        <button class="btn" onclick="document.getElementById('in-split').click()"><i
+                                class="fas fa-folder-open"></i> Open PDF</button>
+                        <button class="btn" onclick="app.selectAllSplit()"><i class="fas fa-check-square"></i> Select
+                            All</button>
+                        <button class="btn btn-primary" onclick="app.doSplit()"><i class="fas fa-download"></i> Extract
+                            Pages</button>
+                    </div>
+
+                    <div id="drop-split" class="drop-zone" onclick="document.getElementById('in-split').click()">
+                        <i class="fas fa-file-invoice"></i>
+                        <span class="drop-desc">Open a PDF to extract pages</span>
+                    </div>
+
+                    <div id="grid-split" class="file-grid"></div>
+                    <input type="file" id="in-split" hidden accept=".pdf">
+
+                    <!-- SPLIT CONTEXT INFO -->
+                    <div class="info-panel"
+                        style="margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+                        <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem;">Extract PDF Pages
+                        </h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                            Need to separate specific pages from a large document? Our <strong>PDF Splitter</strong>
+                            allows you to select exactly which pages you want to keep.
+                            Perfect for extracting invoices, chapters, or specific articles from a larger file.
+                            No upload limits, no waiting queues.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 3. SECURE VIEW -->
+                <div id="view-secure" class="view-panel" style="justify-content:center;">
+                    <div
+                        style="display:grid; grid-template-columns: 1fr 1fr; gap:32px; max-width:900px; width:100%; margin:0 auto;">
+
+                        <!-- Encrypt -->
+                        <div class="form-group">
+                            <h3 style="margin-top:0; color:var(--text-main);">Encrypt PDF</h3>
+                            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:24px;">Add a password
+                                protection to your document.</p>
+
+                            <div id="drop-secure" class="drop-zone"
+                                style="height:150px; min-height:150px; margin-bottom:20px;"
+                                onclick="document.getElementById('in-secure').click()">
+                                <i class="fas fa-lock" style="font-size:2rem;"></i>
+                                <span class="drop-desc">Select PDF</span>
+                            </div>
+
+                            <label class="field-label">Set Password</label>
+                            <input type="password" id="pass-encrypt" class="input-text" placeholder="Enter password...">
+
+                            <button class="btn btn-primary" style="width:100%; margin-top:20px; justify-content:center;"
+                                onclick="app.doEncrypt()">Protect File</button>
+                        </div>
+
+                        <!-- Decrypt -->
+                        <div class="form-group">
+                            <h3 style="margin-top:0; color:var(--text-main);">Decrypt PDF</h3>
+                            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:24px;">Remove password
+                                protection from a file.</p>
+
+                            <div
+                                style="height:150px; background:var(--bg-deep); border:1px dashed var(--border); border-radius:12px; display:flex; align-items:center; justify-content:center; color:var(--text-muted); margin-bottom:20px; opacity:0.6;">
+                                <span>Use File from Left</span>
+                            </div>
+
+                            <label class="field-label">Unlock Password</label>
+                            <input type="password" id="pass-decrypt" class="input-text"
+                                placeholder="Enter original password...">
+
+                            <button class="btn btn-danger" style="width:100%; margin-top:20px; justify-content:center;"
+                                onclick="app.doDecrypt()">Unlock File</button>
+                        </div>
+
+                    </div>
+                    <input type="file" id="in-secure" hidden accept=".pdf">
+                    <!-- SECURE CONTEXT INFO -->
+                    <div class="info-panel"
+                        style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+                        <div style="max-width: 900px; margin: 0 auto; width: 100%;">
+                            <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem;">PDF
+                                Encryption &
+                                Decryption</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                                <strong>Encrypt:</strong> Protect your sensitive data with AES-128 encryption. Set a
+                                strong
+                                password to prevent unauthorized opening.
+                                <br><br>
+                                <strong>Decrypt:</strong> Remove passwords from PDF files you own. Note: You must know
+                                the
+                                original password to unlock the file permanently.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. WATERMARK VIEW (ADVANCED) -->
+                <div id="view-watermark" class="view-panel">
+                    <div style="display:flex; gap:32px; height:100%;">
+
+                        <!-- LEFT: CONTROLS -->
+                        <div class="control-deck" style="width:350px; overflow-y:auto;" id="wm-controls-panel">
+                            <h3 style="margin:0; font-size:1rem; font-weight:700;">Configuration</h3>
+
+                            <!-- TYPE TOGGLE -->
+                            <div class="segmented-control">
+                                <div class="seg-btn active" id="btn-type-text" onclick="app.setWmType('text')">Text
+                                </div>
+                                <div class="seg-btn" id="btn-type-image" onclick="app.setWmType('image')">Image Logo
+                                </div>
+                            </div>
+                            <!-- Hidden radio for logic binding if needed, or we just handle state in JS -->
+                            <input type="hidden" id="wm-type-val" value="text">
+
+                            <!-- INPUTS -->
+                            <div id="opt-text">
+                                <label class="slider-header">Text Content</label>
+                                <input type="text" id="wm-text" class="input-text" value="CONFIDENTIAL">
+
+                                <label class="slider-header" style="margin-top:15px;">Text Color</label>
+                                <div style="display:flex; gap:10px;">
+                                    <input type="color" id="wm-color" value="#FF0000" style="flex:1;">
+                                    <input type="text" class="input-text" value="#FF0000"
+                                        style="width:100px; text-align:center;"
+                                        oninput="document.getElementById('wm-color').value=this.value">
+                                </div>
+                            </div>
+
+                            <div id="opt-image" class="hidden">
+                                <div id="drop-wm-image" class="drop-zone"
+                                    style="height:120px; min-height:120px; border-radius:8px;"
+                                    onclick="document.getElementById('in-wm-image').click()">
+                                    <i class="fas fa-cloud-upload-alt"
+                                        style="font-size:1.5rem; margin-bottom:10px;"></i>
+                                    <span class="drop-desc" style="font-size:0.8rem;">Click to Upload Logo</span>
+                                    <span class="drop-sub">PNG or JPG</span>
+                                </div>
+                                <input type="file" id="in-wm-image" hidden accept="image/png, image/jpeg">
+                            </div>
+
+                            <div style="border-top:1px solid var(--border); margin:5px 0;"></div>
+
+                            <!-- SLIDERS GRID -->
+                            <div class="slider-group">
+                                <div class="slider-header"><span>Opacity</span> <span id="val-opacity">50%</span></div>
+                                <input type="range" id="wm-opacity" min="0.1" max="1" step="0.1" value="0.5"
+                                    class="modern-range"
+                                    oninput="document.getElementById('val-opacity').innerText=Math.round(this.value*100)+'%'">
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-header"><span>Size / Scale</span> <span id="val-size">50</span></div>
+                                <input type="range" id="wm-size" min="10" max="200" step="5" value="50"
+                                    class="modern-range"
+                                    oninput="document.getElementById('val-size').innerText=this.value">
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-header"><span>Rotation</span> <span id="val-rotate">45°</span></div>
+                                <input type="range" id="wm-rotate" min="-90" max="90" step="15" value="45"
+                                    class="modern-range"
+                                    oninput="document.getElementById('val-rotate').innerText=this.value+'°'">
+                            </div>
+
+                            <!-- POSITION -->
+                            <div class="slider-group">
+                                <label class="slider-header">Position Anchor</label>
+                                <select id="wm-position" class="input-text" style="padding:8px;">
+                                    <option value="center">Center (Middle)</option>
+                                    <option value="top-left">Top Left</option>
+                                    <option="top-center">Top Center</option>
+                                        <option value="top-right">Top Right</option>
+                                        <option value="bottom-left">Bottom Left</option>
+                                        <option value="bottom-center">Bottom Center</option>
+                                        <option value="bottom-right">Bottom Right</option>
+                                </select>
+                            </div>
+
+                            <button class="btn btn-primary" onclick="app.doWatermark()"
+                                style="justify-content:center; margin-top:10px; height:45px; font-weight:bold; letter-spacing:0.5px;">
+                                <i class="fas fa-stamp"></i> APPLY WATERMARK
+                            </button>
+                        </div>
+
+                        <!-- RIGHT: PREVIEW -->
+                        <div
+                            style="flex:1; display:flex; flex-direction:column; background:rgba(0,0,0,0.2); border-radius:16px; overflow:hidden; border:1px solid var(--border);">
+                            <div class="top-bar" style="height:50px; background:rgba(0,0,0,0.4); padding:0 20px;">
+                                <span style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">LIVE PREVIEW
+                                    (PAGE 1)</span>
+                            </div>
+
+                            <div
+                                style="flex:1; display:flex; align-items:center; justify-content:center; padding:20px; overflow:auto;">
+                                <div id="drop-water" class="drop-zone"
+                                    onclick="document.getElementById('in-water').click()"
+                                    style="width:100%; border:none; background:transparent;">
+                                    <i class="fas fa-file-pdf"></i>
+                                    <span class="drop-desc">LOAD PDF TO BEGIN</span>
+                                </div>
+
+                                <canvas id="wm-preview"
+                                    style="max-width:100%; box-shadow:0 0 20px rgba(0,0,0,0.5); border-radius:4px;"></canvas>
+                                <div id="wm-controls" class="hidden"></div> <!-- marker for logic -->
+                            </div>
+                        </div>
+
+                    </div>
+                    <input type="file" id="in-water" hidden accept=".pdf">
+
+                    <!-- WATERMARK CONTEXT INFO -->
+                    <div class="info-panel"
+                        style="margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+                        <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem;">Professional PDF
+                            Watermarking</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                            Stamp your documents with text (e.g., "CONFIDENTIAL", "DRAFT") or your company logo.
+                            Customize opacity, rotation, size, and position to create the perfect professional look.
+                            This is essential for protecting intellectual property and marking document status.
+                        </p>
+                    </div>
+                </div>
+
+
+            </div><!-- End Content Area -->
+
+        </div><!-- End Main Stage -->
+
+    </div><!-- End App Container -->
+
+    <script src="js/pdf-studio-ultimate.js"></script>
+    <script src="js/pdf-studio-pro-specific.js"></script>
+</body>
+
+</html>

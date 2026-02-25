@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="The ultimate offline toolbox for developers and gamers. Features 3D Aim Trainer, JSON Formatter, Password Generator, Sensitivity Converter, and more. no servers, zero latency.">
+    
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Mostafa Khalil">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dgtoolbox.com/">
+    <meta property="og:title" content="DGToolbox - The Ultimate Digital Arsenal">
+    <meta property="og:description"
+        content="Limitless Power. Zero Latency. The Ultimate Offline Arsenal for Developers & Gamers. Access 20+ premium tools directly in your browser.">
+    <meta property="og:image" content="https://dgtoolbox.com/assets/icon-512.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://dgtoolbox.com/">
+    <meta property="twitter:title" content="DGToolbox - The Ultimate Digital Arsenal">
+    <meta property="twitter:description"
+        content="Limitless Power. Zero Latency. The Ultimate Offline Arsenal for Developers & Gamers.">
+    <meta property="twitter:image" content="https://dgtoolbox.com/assets/icon-512.png">
+
+    <title>DGToolbox - Unleash Your Digital Potential | Developer & Gamer Tools</title>
+
+    <!-- SEO Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "name": "DGToolbox",
+                "url": "https://dgtoolbox.com",
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://dgtoolbox.com/?q={search_term_string}",
+                    "query-input": "required name=search_term_string"
+                },
+                "description": "The ultimate offline toolbox for developers and gamers."
+            },
+            {
+                "@type": "SoftwareApplication",
+                "name": "DGToolbox Suite",
+                "operatingSystem": "Any",
+                "applicationCategory": "UtilitiesApplication",
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD"
+                },
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "4.9",
+                    "ratingCount": "1250"
+                }
+            }
+        ]
+    }
+    </script>
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    <link rel="canonical" href="https://dgtoolbox.com/">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@500;700&family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/index-specific.css">
+</head>
+
+<body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <div class="splash-content" style="display: flex; align-items: center; gap: 1rem;">
+            <div class="splash-logo"><i class="fas fa-rocket"></i></div>
+            <h1 style="color: var(--text-primary); margin: 0;">DGToolbox</h1>
+        </div>
+        <p style="color: var(--text-secondary); margin-top: 1rem;">Initializing System...</p>
+    </div>
+
+    <header>
+        <div class="logo"><i class="fas fa-rocket"></i> DGToolbox</div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleCommandPalette(true)" title="Search (/)"><i
+                    class="fas fa-search"></i></button>
+
+            <a href="settings.html" class="icon-btn settings-trigger" title="Settings"><i class="fas fa-cog"></i></a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1 data-i18n="hero_title">UNLEASH YOUR DIGITAL POTENTIAL</h1>
+            <p data-i18n="hero_desc">Limitless Power. Zero Latency. The Ultimate Offline Arsenal for Developers &
+                Gamers. No Servers. Just Code.
+            </p>
+
+            <div class="hero-search-container" style="margin-bottom: 2rem;">
+                <button onclick="toggleCommandPalette(true)" style="
+                    background: var(--surface-color); 
+                    border: 1px solid var(--accent-color); 
+                    color: var(--text-secondary); 
+                    padding: 12px 24px; 
+                    border-radius: 30px; 
+                    width: 100%; 
+                    max-width: 400px; 
+                    display: inline-flex; 
+                    align-items: center; 
+                    gap: 10px; 
+                    cursor: pointer; 
+                    box-shadow: var(--shadow-light), var(--shadow-dark);
+                    font-family: inherit;
+                    font-size: 1rem;
+                    transition: transform 0.2s;
+                ">
+                    <i class="fas fa-search"></i>
+                    <span data-i18n="search_placeholder">Search tools...</span>
+                    <span
+                        style="margin-left: auto; font-size: 0.8rem; opacity: 0.7; border: 1px solid var(--text-secondary); padding: 2px 6px; border-radius: 4px;">/</span>
+                </button>
+            </div>
+
+            <a href="#tools" class="cta-button" data-i18n="cta_explore">Explore Arsenal</a>
+        </section>
+
+        <!-- Premium Dashboard -->
+        <section id="miniDashboard" class="dashboard-section"
+            style="max-width: 1200px; margin: 0 auto 3rem; padding: 0 1rem;">
+
+            <div class="dashboard-grid">
+
+                <!-- Welcome Header -->
+                <div class="dashboard-welcome">
+                    <div class="welcome-text">
+                        <h2 id="greetingText">Welcome Back, Operator.</h2>
+                        <p>Systems Online. Ready for tasking.</p>
+                    </div>
+                </div>
+
+                <!-- NEWS CARD -->
+                <div class="dash-card"
+                    style="grid-column: span 12; background: linear-gradient(135deg, rgba(255, 0, 60, 0.15), rgba(0, 240, 255, 0.15)); border:1px solid rgba(255, 255, 255, 0.15);">
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+                        <div>
+                            <span
+                                style="background:#ff003c; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; box-shadow:0 0 10px rgba(255,0,60,0.5);">LATEST
+                                INTEL</span>
+                            <h3 style="margin:8px 0 4px 0; color:#fff; font-family:'Cairo', sans-serif;">CYBER.AIM //
+                                2077 IS ONLINE 🎯</h3>
+                            <p style="margin:0; color:rgba(255,255,255,0.7); font-size:0.9rem;">
+                                <strong>GRID.LOCK + ORBITAL_TRACK</strong><br>
+                                The ultimate e-sports aim trainer. Neon aesthetics. Glitch FX. Zero Latency.
+                            </p>
+                        </div>
+                        <a href="aim-trainer.html" class="cta-button"
+                            style="padding:10px 20px; font-size:0.9rem; text-decoration:none; background:#00f0ff; color:#000; font-weight:700; border:none;">
+                            INITIATE PROTOCOL <i class="fas fa-crosshairs"></i>
+                        </a>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </section>
+
+        <div class="tool-filters" style="text-align: center; margin-bottom: 2rem;">
+            <button class="filter-btn active" data-filter="all"><i class="fas fa-th-large"></i> All</button>
+            <button class="filter-btn" data-filter="gamer"><i class="fas fa-gamepad"></i> Gamers</button>
+            <button class="filter-btn" data-filter="developer"><i class="fas fa-code"></i> Developers</button>
+        </div>
+
+        <section id="tools" class="tools-grid">
+            <!-- Tools will be rendered by JS to support sorting -->
+        </section>
+
+        <!-- SEO Content Section (Visible & Rich) -->
+        <section class="seo-content"
+            style="max-width: 1000px; margin: 4rem auto; padding: 0 1rem; color: var(--text-secondary);">
+            <header style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 1rem;">The Premier Digital
+                    Arsenal</h2>
+                <p style="max-width: 600px; margin: 0 auto; font-size: 1.1rem;">
+                    DGToolbox is the definitive collection of high-performance, client-side utilities engineered for
+                    modern developers and competitive gamers.
+                    Experience zero latency, total privacy, and military-grade precision.
+                </p>
+            </header>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+                <article>
+                    <h3 style="color: var(--accent-color); font-size: 1.5rem; margin-bottom: 1rem;"><i
+                            class="fas fa-code"></i> Developer Utilities</h3>
+                    <p>Streamline your workflow with our advanced suite of coding tools. Securely <strong>generate
+                            strong passwords</strong>, <strong>format and validate JSON</strong>, and <strong>encrypt
+                            text via AES-256</strong> instantly in your browser.</p>
+                    <ul style="margin-top: 1rem; list-style: none; padding-left: 0;">
+                        <li><i class="fas fa-check" style="color: var(--success-color); margin-right: 8px;"></i> <a
+                                href="json-formatter.html" style="color:inherit; text-decoration: underline;">JSON
+                                Formatter & Minifier</a></li>
+                        <li><i class="fas fa-check" style="color: var(--success-color); margin-right: 8px;"></i> <a
+                                href="regex-tester.html" style="color:inherit; text-decoration: underline;">Real-time
+                                Regex Tester</a></li>
+                        <li><i class="fas fa-check" style="color: var(--success-color); margin-right: 8px;"></i> <a
+                                href="color-picker.html" style="color:inherit; text-decoration: underline;">Advanced
+                                Color Picker (HEX/RGB)</a></li>
+                        <li><i class="fas fa-check" style="color: var(--success-color); margin-right: 8px;"></i> <a
+                                href="image-compressor.html" style="color:inherit; text-decoration: underline;">Lossless
+                                Image Compressor</a></li>
+                    </ul>
+                </article>
+
+                <article>
+                    <h3 style="color: var(--danger-color); font-size: 1.5rem; margin-bottom: 1rem;"><i
+                            class="fas fa-crosshairs"></i> Gamer Performance</h3>
+                    <p>Dominate the leaderboard with tools designed for esports excellence. Our <strong>Sensitivity
+                            Converter</strong> seamlessly translates your mouse settings between Valorant, CS2,
+                        Overwatch, and more.</p>
+                    <ul style="margin-top: 1rem; list-style: none; padding-left: 0;">
+                        <li><i class="fas fa-check" style="color: var(--success-color); margin-right: 8px;"></i> <a
+                                href="aim-trainer.html" style="color:inherit; text-decoration: underline;">3D Aim
+                                Trainer (Gridshot)</a></li>
+                        <li><i class="fas fa-check" style="color: var(--success-color); margin-right: 8px;"></i> <a
+                                href="sensitivity-converter.html"
+                                style="color:inherit; text-decoration: underline;">Mouse Sensitivity Converter</a></li>
+                        <li><i class="fas fa-check" style="color: var(--success-color); margin-right: 8px;"></i> <a
+                                href="reaction-tester.html" style="color:inherit; text-decoration: underline;">Reflex &
+                                Reaction Time Tester</a></li>
+                        <li><i class="fas fa-check" style="color: var(--success-color); margin-right: 8px;"></i> <a
+                                href="crosshair-generator.html"
+                                style="color:inherit; text-decoration: underline;">Custom Crosshair Generator</a></li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content centered-footer">
+            <div class="footer-brand">
+                <i class="fas fa-rocket"></i> DGToolbox
+            </div>
+
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
+            </div>
+
+            <div class="footer-socials">
+                <a href="https://github.com/Sasakhalil" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.instagram.com/mostafa_khalil1213/" target="_blank" title="Instagram"><i
+                        class="fab fa-instagram"></i></a>
+            </div>
+
+            <div class="footer-info">
+                <p>&copy; 2026 Sasa Khalil. All rights reserved.</p>
+                <div class="footer-badges">
+                    <span title="100% Client-Side"><i class="fas fa-shield-alt"></i> Secure</span>
+                    <span title="Offline Capable"><i class="fas fa-wifi"></i> Offline</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Update Overlay -->
+        <div id="system-update-overlay">
+            <div class="update-card">
+                <div class="update-icon-wrapper">
+                    <i class="fas fa-rocket update-icon"></i>
+                    <div class="scan-line"></div>
+                    <div class="pulse-ring"></div>
+                </div>
+                <h2 class="update-title">SYSTEM UPGRADE DETECTED</h2>
+                <div class="update-info">
+                    <span class="version-tag">PROTOCOL v<span id="new-version-number">26.0</span></span>
+                    <span class="status-text">DOWNLOADING PATCH...</span>
+                </div>
+                <p class="update-desc">New arsenal detected. Re-initialization required to install latest tools and
+                    security modules.</p>
+                <button id="btn-update-now" class="update-btn" onclick="applySystemUpdate()">
+                    <i class="fas fa-sync-alt fa-spin"></i> INITIALIZE & RESTART
+                </button>
+            </div>
+            <div class="matrix-bg"></div>
+        </div>
+
+    </footer>
+    <script src="js/audio-manager.js"></script>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js?v=26"></script>
+</body>
+
+</html>

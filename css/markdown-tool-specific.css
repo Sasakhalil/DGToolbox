@@ -1,0 +1,261 @@
+/* Full Height Layout */
+    body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    /* Top Menu Bar */
+    .menu-bar {
+        background: #1e1e1e;
+        padding: 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .menu-group {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .menu-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: none;
+        color: #d4d4d4;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+
+    .menu-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--accent-color);
+    }
+
+    .menu-btn.danger:hover {
+        color: #ff6b6b;
+        background: rgba(255, 107, 107, 0.1);
+    }
+
+    /* Toolbar */
+    .editor-toolbar {
+        background: #2d2d2d;
+        padding: 0.5rem 1rem;
+        display: flex;
+        gap: 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        align-items: center;
+        overflow-x: auto;
+    }
+
+    .tool-btn {
+        background: transparent;
+        border: none;
+        color: #d4d4d4;
+        padding: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.9rem;
+        min-width: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .tool-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--accent-color);
+    }
+
+    .divider {
+        width: 1px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 0 5px;
+    }
+
+    /* Workspace */
+    .workspace {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Editor Pane */
+    .editor-pane {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        background: #1e1e1e;
+        transition: flex 0.3s ease;
+    }
+
+    .pane-header {
+        background: #252526;
+        padding: 5px 15px;
+        font-size: 0.75rem;
+        color: #858585;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 30px;
+    }
+
+    #markdownInput {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #d4d4d4;
+        padding: 20px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        resize: none;
+        outline: none;
+    }
+
+    /* Preview Pane */
+    .preview-pane {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: var(--surface-color);
+        overflow: hidden;
+        transition: flex 0.3s ease;
+    }
+
+    #htmlPreview {
+        flex: 1;
+        padding: 30px;
+        overflow-y: auto;
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        line-height: 1.7;
+    }
+
+    /* Status Bar */
+    .status-bar {
+        background: #007acc;
+        color: white;
+        padding: 4px 15px;
+        font-size: 0.8rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .status-item {
+        display: flex;
+        gap: 15px;
+    }
+
+    /* Markdown Preview Styles */
+    #htmlPreview h1,
+    #htmlPreview h2,
+    #htmlPreview h3 {
+        color: var(--accent-color);
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+    }
+
+    #htmlPreview h1 {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 0.3em;
+    }
+
+    #htmlPreview p {
+        margin-bottom: 1em;
+    }
+
+    #htmlPreview code {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2px 5px;
+        border-radius: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9em;
+    }
+
+    #htmlPreview pre {
+        background: #1e1e1e;
+        padding: 15px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin-bottom: 1em;
+    }
+
+    #htmlPreview pre code {
+        background: transparent;
+        padding: 0;
+    }
+
+    #htmlPreview blockquote {
+        border-left: 4px solid var(--accent-color);
+        margin: 0;
+        padding-left: 15px;
+        color: var(--text-secondary);
+    }
+
+    #htmlPreview img {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+
+    #htmlPreview a {
+        color: var(--accent-color);
+        text-decoration: none;
+    }
+
+    #htmlPreview a:hover {
+        text-decoration: underline;
+    }
+
+    #htmlPreview table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    #htmlPreview th,
+    #htmlPreview td {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 8px;
+        text-align: left;
+    }
+
+    #htmlPreview th {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    @media (max-width: 768px) {
+        .workspace {
+            flex-direction: column;
+        }
+
+        .editor-pane {
+            border-right: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 50%;
+        }
+    }
